@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #e91e63;
+    height: 800px;
+    display: flex;
+    align-items: center;
+}
+
+a {
+    /*color: #13d4b6 !important;*/
+}
+
+.card-panel {
+    text-align: center;
+}
+
+    .card-panel h3 {
+        font-weight: 300 !important;
+        margin-top: -1em;
+    }
+
+#user-img {
+    margin: auto;
+    display: block;
+    position: relative;
+    top: -4em;
+    max-width: 100px;
+    max-height: 100px;
+}
+
+#submitBtn {
+    background: #13d4b6;
+    width: 100%;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.5em;
+    height: 55px;
+}
+
+
+/* Registe page Specifics */
+
+.register {
+    background: #9c27b0;
+    height: 960px;
+}
+
+.conteiner-login {
+    margin-top: 25%;
+    width: 100%;
+    margin-left: 1%;
+}
+
+.sidebar-login {
+    width: 330px;
+    margin-top: -1%;
+    height:100%;
+   
+}
+
+.col-login {
+    width: 130%;
+    margin-top: 50%;
+    margin-left: -15%;
+}
+
+img#background_background_image {
+    margin-top: 10%;
+    margin-left: 0%;
+}

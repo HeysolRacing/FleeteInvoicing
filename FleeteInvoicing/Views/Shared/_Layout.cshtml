@@ -2,42 +2,111 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fleet - Invoicing</title>
+    <link rel="icon" type="image/x-icon" href="~/Content/img/element-fleet.ico">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    @Styles.Render("~/Content/css/font-awesome.cs")
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        .footer-theme-black {
+            background-color: black;
+            color: #ffffff;
+            text-align: center;
+            margin-top: -2%;
+        }
+
+        .fa.orange500 {
+            color: deepskyblue;
+        }
+    </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- #END# Search Bar -->
+    <nav class="navbar">
+        <div class="navbar-inverse navbar-fixed-top">
+          <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a class="navbar-brand" href="#"><img src="~/Content/img/ElementReverseColour_RGB-PNG.png" alt="Element" style="width:auto;height: 40px;" /></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Catálogos<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Customers", "Index", "CFD_Expanded")</li>
+                            <li>@Html.ActionLink("Document Usage", "Index", "CFD_Expanded")</li>
+                            <li>@Html.ActionLink("Universal Collection", "Index", "UniversalCollection")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fleet eInvoicing<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>Process</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administracion<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("FeeCodes", "Index", "FeeCodes")</li>
+                        </ul>
+                    </li>
                 </ul>
                 <p class="nav navbar-text navbar-right">Hello, @User.Identity.Name!</p>
             </div>
+          </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    </nav>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                @RenderBody()
+                <hr />
+            </div>
+        </div>
+    </section>
+    @*<section class="container body-content theme-black">*@
+    <hr />
+    <footer class="body-content footer-theme-black">
+
+        <div class="copyright">
+            &copy;<span>@DateTime.Now.Year </span> <a href="javascript:void(0);">Fleet Invoicing CDMX...</a>
+        </div>
+        <div class="version">
+            <b>Version: </b> 1.0.0
+        </div>
+    </footer>
+    @*</section>*@
+
+    @Scripts.Render("~/bundles/plugins")
+    @*@Scripts.Render("~/bundles/knockout")*@
     @RenderSection("scripts", required: false)
 </body>
 </html>

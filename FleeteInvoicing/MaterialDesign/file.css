@@ -1,0 +1,103 @@
+﻿.mdi-editor-attach-file:before {
+    content: "\e776";
+}
+
+
+
+.mdi-editor-insert-drive-file:before {
+    content: "\e79d";
+}
+
+
+.mdi-file-attachment:before {
+    content: "\e7aa";
+}
+
+.mdi-file-cloud-circle:before {
+    content: "\e7ab";
+}
+
+.mdi-file-cloud-done:before {
+    content: "\e7ac";
+}
+
+.mdi-file-cloud-download:before {
+    content: "\e7ad";
+}
+
+.mdi-file-cloud-off:before {
+    content: "\e7ae";
+}
+
+.mdi-file-cloud-queue:before {
+    content: "\e7af";
+}
+
+.mdi-file-cloud-upload:before {
+    content: "\e7b0";
+}
+
+.mdi-file-cloud:before {
+    content: "\e7b1";
+}
+
+.mdi-file-file-download:before {
+    content: "\e7b2";
+}
+
+.mdi-file-file-upload:before {
+    content: "\e7b3";
+}
+
+.mdi-file-folder-open:before {
+    content: "\e7b4";
+}
+
+.mdi-file-folder-shared:before {
+    content: "\e7b5";
+}
+
+.mdi-file-folder:before {
+    content: "\e7b6";
+}
+
+.mdi-device-access-alarm:before {
+    content: "\e720";
+}
+.file-field {
+    position: relative;
+}
+
+    .file-field .file-path-wrapper {
+        overflow: hidden;
+        padding-left: 10px;
+    }
+
+    .file-field input.file-path {
+        width: 100%;
+    }
+
+    .file-field .btn, .file-field .btn-large {
+        float: left;
+        height: 3rem;
+        line-height: 3rem;
+    }
+
+    .file-field span {
+        cursor: pointer;
+    }
+
+    .file-field input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<FleeteInvoicing.Models.UNIVERSAL_COLLECTION>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>
+                FLEET
+            </th>
+            <th>
+                ACCOUNT
+            </th>
+            <th>
+                CLABE
+            </th>
+            <th>
+                ABA
+            </th>
+            <th>
+                SWIFT
+            </th>
+            <th>
+                CURRENCY
+            </th>
+            <th></th>
+        </tr>
+    <thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uc_fleet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uc_account)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uc_clabe)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uc_aba)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uc_swift)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uc_currency)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.id_universal }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.id_universal }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id_universal })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+@section Scripts{
+
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+
+    <script>
+    $(function () {
+        $('#example').DataTable();
+    });
+    </script>
+}

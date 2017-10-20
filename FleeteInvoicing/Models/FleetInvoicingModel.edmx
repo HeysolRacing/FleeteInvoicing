@@ -1,0 +1,582 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FleeteInvoicingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ADName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CAT_CFDI_PRODUCTS">
+          <Key>
+            <PropertyRef Name="cfdiProductId" />
+          </Key>
+          <Property Name="cfdiProductId" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="cfdiProductDescription" Type="varchar" MaxLength="200" />
+          <Property Name="active" Type="int" />
+          <Property Name="user" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CAT_CURRENCY">
+          <Key>
+            <PropertyRef Name="currencyId" />
+          </Key>
+          <Property Name="currencyId" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="currencyDescription" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="CAT_PAYMENTMETHODTYPE">
+          <Key>
+            <PropertyRef Name="paymentMethodTypeId" />
+          </Key>
+          <Property Name="paymentMethodTypeId" Type="int" Nullable="false" />
+          <Property Name="paymentMethodTypeCode" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="paymentMethodDesc" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CFD_EXPANDED_ADDRESS">
+          <Key>
+            <PropertyRef Name="CUSTID" />
+          </Key>
+          <Property Name="CUSTID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CORP_CD" Type="varchar" MaxLength="4" />
+          <Property Name="CNTC_NO" Type="varchar" MaxLength="4" />
+          <Property Name="ADDRESS1" Type="nvarchar" MaxLength="100" />
+          <Property Name="ADDRESS2" Type="nvarchar" MaxLength="100" />
+          <Property Name="ADDRESS3" Type="nvarchar" MaxLength="100" />
+          <Property Name="CITY" Type="varchar" MaxLength="25" />
+          <Property Name="STATE" Type="varchar" MaxLength="25" />
+          <Property Name="ZIP" Type="varchar" MaxLength="10" />
+          <Property Name="CUSTNAME" Type="nvarchar" MaxLength="150" />
+          <Property Name="RFC" Type="varchar" MaxLength="17" />
+          <Property Name="PAYMENT_METHOD_TYPE" Type="varchar" MaxLength="2" />
+          <Property Name="CFDI_USAGE" Type="varchar" MaxLength="3" />
+        </EntityType>
+        <EntityType Name="UNIVERSAL_COLLECTION">
+          <Key>
+            <PropertyRef Name="id_universal" />
+          </Key>
+          <Property Name="id_universal" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="uc_fleet" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="uc_account" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="uc_clabe" Type="varchar" MaxLength="30" />
+          <Property Name="uc_aba" Type="varchar" MaxLength="30" />
+          <Property Name="uc_swift" Type="varchar" MaxLength="30" />
+          <Property Name="uc_currency" Type="varchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Audit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="int">
+          <Parameter Name="CFDUniqueID" Type="varchar" Mode="In" />
+          <Parameter Name="invoiceSubtotal" Type="decimal" Mode="In" />
+          <Parameter Name="invoiceTaxes" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="CFD_createConcepts_Chrgback_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createConcepts_Lease_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createConcepts_Service_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createErrorsLog_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createHeaders_Chrgback_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createHeaders_Lease_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createHeaders_Service_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createInvoices_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createPaymentData_Chrgback_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createPaymentData_Lease_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createPaymentData_Service_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createRecipients_Chrgback_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createRecipients_Lease_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createRecipients_Service_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createShipmentData_Chrgback_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createShipmentData_Lease_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createShipmentData_Service_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createVATData_Chrgback_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createVATData_Lease_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_createVATData_Service_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="CFD_truncate_invoice_tables_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="checkDifferences_ChrgBack_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="Convi_Convierte" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="nvarchar">
+          <Parameter Name="Cual" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Convi_EnLetras" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="nvarchar">
+          <Parameter Name="Cual" Type="float" Mode="In" />
+          <Parameter Name="moneda" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Convi_FindNum" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="nvarchar">
+          <Parameter Name="Cual" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Convi_PreConvierte" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="nvarchar">
+          <Parameter Name="Cual" Type="int" Mode="In" />
+        </Function>
+        <Function Name="correct_Concepts_Labels_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="eliminarAcentos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="varchar">
+          <Parameter Name="concepto" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GL_createControlFile_Input_File_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="GL_createInterfaceFile_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="GL_createInterfaceItems_ChrgBack_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="GL_createInterfaceItems_Engine_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="GL_createInterfaceItems_Lease_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="GL_createInterfaceItems_Service_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="GL_createInterfaceItems_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="GL_createInterfaceItemsCancelled_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="LOAD_validateAmounts_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="modify_headerDate_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" />
+        <Function Name="obtenerFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="numeric">
+          <Parameter Name="verticalID" Type="varchar" Mode="In" />
+          <Parameter Name="corpID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="obtenerSerie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="varchar">
+          <Parameter Name="verticalID" Type="varchar" Mode="In" />
+          <Parameter Name="corpID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="obtenerTipoCambio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm" ReturnType="decimal">
+          <Parameter Name="fechaTipoCambio" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="UCreateOrAppendTextFile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="EBilling_Adm">
+          <Parameter Name="Filename" Type="varchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="FleeteInvoicingModelStoreContainer">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CAT_CFDI_PRODUCTS" EntityType="Self.CAT_CFDI_PRODUCTS" Schema="eInvoicing" store:Type="Tables" />
+          <EntitySet Name="CAT_CURRENCY" EntityType="Self.CAT_CURRENCY" Schema="eInvoicing" store:Type="Tables" />
+          <EntitySet Name="CAT_PAYMENTMETHODTYPE" EntityType="Self.CAT_PAYMENTMETHODTYPE" Schema="eInvoicing" store:Type="Tables" />
+          <EntitySet Name="CFD_EXPANDED_ADDRESS" EntityType="Self.CFD_EXPANDED_ADDRESS" Schema="eInvoicing" store:Type="Tables" />
+          <EntitySet Name="UNIVERSAL_COLLECTION" EntityType="Self.UNIVERSAL_COLLECTION" Schema="eInvoicing" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FleeteInvoicingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="FleeteInvoicingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CAT_PAYMENTMETHODTYPE" EntityType="FleeteInvoicingModel.CAT_PAYMENTMETHODTYPE" />
+          <EntitySet Name="CFD_EXPANDED_ADDRESS1" EntityType="FleeteInvoicingModel.CFD_EXPANDED_ADDRESS1" />
+          <EntitySet Name="AspNetRoles" EntityType="FleeteInvoicingModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="FleeteInvoicingModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="FleeteInvoicingModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUserRoles" EntityType="FleeteInvoicingModel.AspNetUserRole" />
+          <EntitySet Name="AspNetUsers" EntityType="FleeteInvoicingModel.AspNetUser" />
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="FleeteInvoicingModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRole" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="FleeteInvoicingModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="FleeteInvoicingModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="FleeteInvoicingModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRole" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <EntitySet Name="CAT_CFDI_PRODUCTS" EntityType="FleeteInvoicingModel.CAT_CFDI_PRODUCTS" />
+          <EntitySet Name="CAT_CURRENCY" EntityType="FleeteInvoicingModel.CAT_CURRENCY" />
+          <EntitySet Name="UNIVERSAL_COLLECTION" EntityType="FleeteInvoicingModel.UNIVERSAL_COLLECTION" />
+        </EntityContainer>
+        <EntityType Name="CAT_PAYMENTMETHODTYPE">
+          <Key>
+            <PropertyRef Name="paymentMethodTypeId" />
+          </Key>
+          <Property Name="paymentMethodTypeId" Type="Int32" Nullable="false" />
+          <Property Name="paymentMethodTypeCode" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="paymentMethodDesc" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CFD_EXPANDED_ADDRESS1">
+          <Key>
+            <PropertyRef Name="CUSTID" />
+          </Key>
+          <Property Name="CUSTID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CORP_CD" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="CNTC_NO" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESS2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESS3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CITY" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="STATE" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="ZIP" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CUSTNAME" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RFC" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
+          <Property Name="PAYMENT_METHOD_TYPE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="CFDI_USAGE" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserRoles" Relationship="FleeteInvoicingModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetRole" ToRole="AspNetUserRole" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="FleeteInvoicingModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="FleeteInvoicingModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetRole" Relationship="FleeteInvoicingModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetUserRole" ToRole="AspNetRole" />
+          <NavigationProperty Name="AspNetUser" Relationship="FleeteInvoicingModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUserRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ADName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="FleeteInvoicingModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="FleeteInvoicingModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="AspNetUserRoles" Relationship="FleeteInvoicingModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserRole" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Type="FleeteInvoicingModel.AspNetRole" Role="AspNetRole" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FleeteInvoicingModel.AspNetUserRole" Role="AspNetUserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRole">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="FleeteInvoicingModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FleeteInvoicingModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="FleeteInvoicingModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FleeteInvoicingModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Type="FleeteInvoicingModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FleeteInvoicingModel.AspNetUserRole" Role="AspNetUserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRole">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CAT_CFDI_PRODUCTS">
+          <Key>
+            <PropertyRef Name="cfdiProductId" />
+          </Key>
+          <Property Name="cfdiProductId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cfdiProductDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="active" Type="Int32" />
+          <Property Name="user" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CAT_CURRENCY">
+          <Key>
+            <PropertyRef Name="currencyId" />
+          </Key>
+          <Property Name="currencyId" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="currencyDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="UNIVERSAL_COLLECTION">
+          <Key>
+            <PropertyRef Name="id_universal" />
+          </Key>
+          <Property Name="id_universal" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="uc_fleet" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="uc_account" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="uc_clabe" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="uc_aba" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="uc_swift" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="uc_currency" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FleeteInvoicingModelStoreContainer" CdmEntityContainer="FleeteInvoicingEntities">
+          <EntitySetMapping Name="CAT_PAYMENTMETHODTYPE">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.CAT_PAYMENTMETHODTYPE">
+              <MappingFragment StoreEntitySet="CAT_PAYMENTMETHODTYPE">
+                <ScalarProperty Name="paymentMethodDesc" ColumnName="paymentMethodDesc" />
+                <ScalarProperty Name="paymentMethodTypeCode" ColumnName="paymentMethodTypeCode" />
+                <ScalarProperty Name="paymentMethodTypeId" ColumnName="paymentMethodTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CFD_EXPANDED_ADDRESS1">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.CFD_EXPANDED_ADDRESS1">
+              <MappingFragment StoreEntitySet="CFD_EXPANDED_ADDRESS">
+                <ScalarProperty Name="CFDI_USAGE" ColumnName="CFDI_USAGE" />
+                <ScalarProperty Name="PAYMENT_METHOD_TYPE" ColumnName="PAYMENT_METHOD_TYPE" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="CUSTNAME" ColumnName="CUSTNAME" />
+                <ScalarProperty Name="ZIP" ColumnName="ZIP" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="ADDRESS3" ColumnName="ADDRESS3" />
+                <ScalarProperty Name="ADDRESS2" ColumnName="ADDRESS2" />
+                <ScalarProperty Name="ADDRESS1" ColumnName="ADDRESS1" />
+                <ScalarProperty Name="CNTC_NO" ColumnName="CNTC_NO" />
+                <ScalarProperty Name="CORP_CD" ColumnName="CORP_CD" />
+                <ScalarProperty Name="CUSTID" ColumnName="CUSTID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserRoles">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.AspNetUserRole">
+              <MappingFragment StoreEntitySet="AspNetUserRoles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="ADName" ColumnName="ADName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CAT_CFDI_PRODUCTS">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.CAT_CFDI_PRODUCTS">
+              <MappingFragment StoreEntitySet="CAT_CFDI_PRODUCTS">
+                <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="cfdiProductDescription" ColumnName="cfdiProductDescription" />
+                <ScalarProperty Name="cfdiProductId" ColumnName="cfdiProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CAT_CURRENCY">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.CAT_CURRENCY">
+              <MappingFragment StoreEntitySet="CAT_CURRENCY">
+                <ScalarProperty Name="currencyDescription" ColumnName="currencyDescription" />
+                <ScalarProperty Name="currencyId" ColumnName="currencyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UNIVERSAL_COLLECTION">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.UNIVERSAL_COLLECTION">
+              <MappingFragment StoreEntitySet="UNIVERSAL_COLLECTION">
+                <ScalarProperty Name="uc_currency" ColumnName="uc_currency" />
+                <ScalarProperty Name="uc_swift" ColumnName="uc_swift" />
+                <ScalarProperty Name="uc_aba" ColumnName="uc_aba" />
+                <ScalarProperty Name="uc_clabe" ColumnName="uc_clabe" />
+                <ScalarProperty Name="uc_account" ColumnName="uc_account" />
+                <ScalarProperty Name="uc_fleet" ColumnName="uc_fleet" />
+                <ScalarProperty Name="id_universal" ColumnName="id_universal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

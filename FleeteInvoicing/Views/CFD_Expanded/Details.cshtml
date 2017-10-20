@@ -1,0 +1,114 @@
+﻿@model FleeteInvoicing.Models.CFD_EXPANDED_ADDRESS1
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CFD_EXPANDED_ADDRESS1</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CORP_CD)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CORP_CD)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CNTC_NO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CNTC_NO)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ADDRESS1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ADDRESS1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ADDRESS2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ADDRESS2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ADDRESS3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ADDRESS3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CITY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CITY)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.STATE)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.STATE)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ZIP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ZIP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CUSTNAME)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CUSTNAME)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RFC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PAYMENT_METHOD_TYPE)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PAYMENT_METHOD_TYPE)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CFDI_USAGE)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CFDI_USAGE)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CUSTID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

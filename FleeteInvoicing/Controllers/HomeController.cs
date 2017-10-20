@@ -16,14 +16,19 @@ namespace FleeteInvoicing.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
+        public ActionResult Unauthorized()
+        {
+            ViewBag.Message = "You don´t have enough priviledges for this module.";
+            return View();
+        }
+
+        //[Authorize(Roles = "NotUserExist")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }
