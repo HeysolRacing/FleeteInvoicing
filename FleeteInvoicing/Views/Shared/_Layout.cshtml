@@ -60,9 +60,9 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Catálogos<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Customers", "Index", "CFD_Expanded")</li>
-                            <li>@Html.ActionLink("Document Usage", "Index", "CFD_Expanded")</li>
-                            <li>@Html.ActionLink("Universal Collection", "Index", "UniversalCollection")</li>
+                            <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Clientes</span>", "Index", "CFD_Expanded", null, null) </li>
+                            <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Cuentas Virtuales</span>",  "Index", "UniversalCollection", null, null) </li>
+                            <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Metodo de Pago</span>", "Index", "PaymentMethod", null, null) </li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -74,7 +74,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administracion<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("FeeCodes", "Index", "FeeCodes")</li>
+                            <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Roles</span>", "Index", "AspNetRoles", null, null) </li>
+                            <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Users</span>", "Index", "Users", null, null) </li>
                         </ul>
                     </li>
                 </ul>

@@ -11,10 +11,10 @@ namespace FleeteInvoicing.Controllers
     {
         private FleeteInvoicingEntities db = new FleeteInvoicingEntities();
 
-        [Authorize(Roles = "Administrator")]
+        [CustomAuthorize(Roles = "Administrator")]
         public ActionResult Index()
         {
-            var users = db.AspNetUsers.ToList();
+            var users = db.AspNetUsers.ToList().OrderBy(s => s.ADName);
             var usersView = new List<UserView>();
 
             foreach (var user in users)
@@ -23,6 +23,7 @@ namespace FleeteInvoicing.Controllers
                 {
                     ADName = user.ADName,
                     UserName = user.UserName,
+                    UserID = user.Id
                 };
 
                 usersView.Add(userView);
@@ -31,12 +32,13 @@ namespace FleeteInvoicing.Controllers
             return View(usersView);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [CustomAuthorize(Roles = "Administrator")]
         public ActionResult Roles(string userID)
         {
             var roles = db.AspNetRoles.ToList();
             var users = db.AspNetUsers.ToList();
-            var user = users.Find(u => u.UserName == userID);
+
+            var user = users.Find(u => u.Id == userID);
 
             var rolesView = new List<RoleView>();
 
@@ -55,33 +57,30 @@ namespace FleeteInvoicing.Controllers
 
             var userView = new UserView
             {
-                UserName = user.UserName,
-                ADName = user.ADName,
+                UserID = user.Id,
                 Roles = rolesView
             };
 
             return View(userView);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [CustomAuthorize(Roles = "Administrator")]
         public ActionResult AddRole(string userID)
         {
             if (string.IsNullOrEmpty(userID))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
             var users = db.AspNetUsers.ToList();
             var user = users.Find(u => u.Id == userID);
 
             if (user == null)
-            {
                 return HttpNotFound();
-            }
+
             var userView = new UserView
             {
+                ADName = user.ADName,
                 UserName = user.UserName,
-                UserID = user.Id,
+                UserID = user.Id
             };
 
             var list = db.AspNetRoles.ToList();
@@ -96,40 +95,42 @@ namespace FleeteInvoicing.Controllers
         public ActionResult AddRole(string userID, FormCollection form)
         {
             var roleID = Request["RoleID"];
-            var users = db.AspNetUsers.ToList();
-            var user = users.Find(u => u.Id == userID);
+            var roleManager = db.AspNetRoles.ToList();
+            var user = db.AspNetUsers.ToList().Find(u => u.Id == userID);
 
             var userView = new UserView
             {
-                ADName = user.ADName,
                 UserName = user.UserName,
+                ADName = user.ADName,
                 UserID = user.Id,
             };
 
             if (string.IsNullOrEmpty(roleID))
             {
                 ViewBag.Error = "You must select a role";
-
                 var list = db.AspNetRoles.ToList();
-                //list.Add(new IdentityRole { Id = "", Name = "Seleccione un rol... " });
                 list = list.OrderBy(r => r.Name).ToList();
                 ViewBag.RoleID = new SelectList(list, "Id", "Name");
                 return View(userView);
             }
 
-            var roles = db.AspNetRoles.ToList();
-            var role = db.AspNetRoles.ToList().Find(r => r.Id == roleID);
+            if (ModelState.IsValid)
+            {
+                AspNetUserRole aspNetUserRole = new AspNetUserRole
+                {
+                    RoleId = roleID,
+                    UserId = user.Id,
+                };
 
-            //if (!userManager.IsInRole(userID, role.Id))
-            //{
-            //    userManager.AddToRole(userID, role.Name);
-            //}
+                db.AspNetUserRoles.Add(aspNetUserRole);
+                db.SaveChanges();
+            }
 
             var rolesView = new List<RoleView>();
 
             foreach (var item in user.AspNetUserRoles)
             {
-                role = roles.Find(r => r.Id == item.RoleId);
+                var role = roleManager.Find(r => r.Id == item.RoleId);
 
                 var roleView = new RoleView
                 {
@@ -142,36 +143,39 @@ namespace FleeteInvoicing.Controllers
 
             userView = new UserView
             {
-                ADName = user.ADName,
                 UserName = user.UserName,
+                ADName = user.ADName,
                 UserID = user.Id,
-                Roles = rolesView
+                Roles = rolesView,
             };
 
             return View("Roles", userView);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [CustomAuthorize(Roles = "Administrator")]
         public ActionResult Delete(string userID, string roleID)
         {
             if (string.IsNullOrEmpty(userID) || string.IsNullOrEmpty(roleID))
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var userManager = db.AspNetUsers.ToList();
+            var roleManager = db.AspNetRoles.ToList();
+
+            var user = userManager.Find(u => u.Id == userID);
+            var role = roleManager.Find(u => u.Id == roleID);
+
+            if (!string.IsNullOrEmpty(role.Id) || !string.IsNullOrEmpty(user.Id))
+            {
+                var userRole = db.AspNetUserRoles.ToList();
+                var userRoleID = userRole.Find(i => i.UserId == user.Id && i.RoleId == role.Id);
+
+                AspNetUserRole aspNetUserRole = db.AspNetUserRoles.Find(userRoleID.ID);
+                db.AspNetUserRoles.Remove(aspNetUserRole);
+                db.SaveChanges();
             }
 
-            //var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
-            //var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-
-            var user = db.AspNetUsers.ToList().Find(u => u.Id == userID); 
-            var role = db.AspNetRoles.ToList().Find(u => u.Id == roleID);
-
-            //if (db.AspNetUsers.ToList().IsInRole(user.Id, role.Name))
-            //{
-            //    userManager.RemoveFromRole(user.Id, role.Name);
-            //}
-
-            var users = db.AspNetUsers.ToList();
-            var roles = db.AspNetRoles.ToList();
+            var users = userManager.ToList();
+            var roles = roleManager.ToList();
             var rolesView = new List<RoleView>();
 
             foreach (var item in user.AspNetUserRoles)
@@ -189,8 +193,8 @@ namespace FleeteInvoicing.Controllers
 
             var userView = new UserView
             {
-                ADName = user.ADName,
                 UserName = user.UserName,
+                ADName = user.ADName,
                 UserID = user.Id,
                 Roles = rolesView
             };

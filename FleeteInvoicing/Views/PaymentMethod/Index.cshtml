@@ -1,0 +1,54 @@
+﻿@model IEnumerable<FleeteInvoicing.Models.CAT_PAYMENTMETHODTYPE>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table id="paymentMethod" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>
+                Payment Method Code
+            </th>
+            <th>
+                Description
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.paymentMethodTypeCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.paymentMethodDesc)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.paymentMethodTypeId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.paymentMethodTypeId })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+
+    <script>
+    $(function () {
+        $('#paymentMethod').DataTable();
+    });
+    </script>
+}

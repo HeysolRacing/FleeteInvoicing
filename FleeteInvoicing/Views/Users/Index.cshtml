@@ -1,0 +1,31 @@
+﻿@model IEnumerable<FleeteInvoicing.ViewModels.UserView>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Permissions Manager</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            UserName
+        </th>
+        <th>
+            ADName
+        </th>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ADName)
+            </td>
+            <td>
+                @Html.ActionLink("Roles", "Roles", new { userID = item.UserID })
+            </td>
+        </tr>
+        }
+    </table>
