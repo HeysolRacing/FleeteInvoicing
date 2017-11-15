@@ -139,7 +139,10 @@
     <Compile Include="Controllers\UniversalCollectionController.cs" />
     <Compile Include="AdditionalComponents\CustomAuthorize.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Entities\Expanded.cs" />
+    <Compile Include="Entities\PaymentMethod.cs" />
     <Compile Include="Entities\RolesMap.cs" />
+    <Compile Include="Entities\UniversalCollection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -167,7 +170,7 @@
     <Compile Include="Models\CAT_PAYMENTMETHODTYPE.cs">
       <DependentUpon>FleetInvoicingModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CFD_EXPANDED_ADDRESS1.cs">
+    <Compile Include="Models\CFD_EXPANDED_ADDRESS.cs">
       <DependentUpon>FleetInvoicingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FleetInvoicingModel.Context.cs">
@@ -192,13 +195,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\RoleView.cs" />
     <Compile Include="ViewModels\UserView.cs" />
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -3608,9 +3604,10 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="Scripts\Views\Catalogs\provider.js" />
+    <Content Include="Scripts\Views\Catalogs\customers.js" />
+    <Content Include="Scripts\Views\Catalogs\paymentMethod.js" />
     <Content Include="Scripts\Views\Catalogs\roles.js" />
-    <Content Include="WebForm1.aspx" />
+    <Content Include="Scripts\Views\Catalogs\universal.js" />
     <EntityDeploy Include="Models\FleetInvoicingModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>FleetInvoicingModel.Designer.cs</LastGenOutput>
@@ -3650,10 +3647,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\CFD_Expanded\Create.cshtml" />
-    <Content Include="Views\CFD_Expanded\Delete.cshtml" />
     <Content Include="Views\CFD_Expanded\Details.cshtml" />
-    <Content Include="Views\CFD_Expanded\Edit.cshtml" />
     <Content Include="Views\CFD_Expanded\Index.cshtml" />
     <Content Include="Views\Error\Unauthorized.cshtml" />
     <Content Include="Views\UniversalCollection\Create.cshtml" />
@@ -3661,14 +3655,8 @@
     <Content Include="Views\UniversalCollection\Details.cshtml" />
     <Content Include="Views\UniversalCollection\Edit.cshtml" />
     <Content Include="Views\UniversalCollection\Index.cshtml" />
-    <Content Include="Views\AspNetRoles\Create.cshtml" />
     <Content Include="Views\AspNetRoles\Delete.cshtml" />
-    <Content Include="Views\AspNetRoles\Edit.cshtml" />
     <Content Include="Views\AspNetRoles\Index.cshtml" />
-    <Content Include="Views\PaymentMethod\Create.cshtml" />
-    <Content Include="Views\PaymentMethod\Delete.cshtml" />
-    <Content Include="Views\PaymentMethod\Details.cshtml" />
-    <Content Include="Views\PaymentMethod\Edit.cshtml" />
     <Content Include="Views\PaymentMethod\Index.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\AddRole.cshtml" />

@@ -1,81 +1,413 @@
-﻿@model IEnumerable<FleeteInvoicing.Models.UNIVERSAL_COLLECTION>
+﻿@Styles.Render("~/MaterialDesign/css/pulse.css")
+@Styles.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.css")
+@Styles.Render("~/MaterialDesign/plugins/bootstrap-select/css/bootstrap-select.css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
 
+@model FleeteInvoicing.Entities.UniversalCollection
 @{
-    ViewBag.Title = "Index";
+    IEnumerable<FleeteInvoicing.Models.UNIVERSAL_COLLECTION> Universal = TempData["Universal"] as IEnumerable<FleeteInvoicing.Models.UNIVERSAL_COLLECTION>;
 }
+<style type="text/css">
+    #layoutFleet {
+        margin-left: 0%;
+    }
+</style>
 
-<h2>Index</h2>
-<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div align="left">
+    <div id="vmProvider" class="container-fluid">
+        <div class="block-header">
+            <h2><b>Cat&iacute;logo de Cuentas Virtuales</b></h2>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            @Html.ActionLink("Crear Cuenta Virtual", "#", null, new { data_toggle = "modal", data_target = "#modProviderNew" })
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Index", "UniversalCollection", FormMethod.Post, new { role = "form" })) { }
+                    </div>
+                    <div class="body">
+                        <div id="area_tabla">
+                            <table id="grdProvider" role="grid" class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <tr style="background-color:#757575;color:#fff;" role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1" aria-sort="ascending" style="width: 200px;"># FLOTA</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:250px;">CUENTA</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:250px;">CLABE</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:200px;">ABA</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:200px;">SWIFT</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:150px;">MONEDA</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:300px;">ADMINISTRACION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Universal)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.uc_fleet)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.uc_account)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.uc_clabe)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.uc_aba)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.uc_swift)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.uc_currency)
+                                            </td>
+                                            <td>
+                                                @{
+                                                    <button type="button" data-color="white" class="btn bg-blue-grey waves-effect" onclick='EditUniversal("@Html.DisplayFor(modelItem => item.id_universal)")'>Modificar</button>
+                                                }
 
-<table id="example" class="display" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th>
-                FLEET
-            </th>
-            <th>
-                ACCOUNT
-            </th>
-            <th>
-                CLABE
-            </th>
-            <th>
-                ABA
-            </th>
-            <th>
-                SWIFT
-            </th>
-            <th>
-                CURRENCY
-            </th>
-            <th></th>
-        </tr>
-    <thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.uc_fleet)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.uc_account)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.uc_clabe)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.uc_aba)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.uc_swift)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.uc_currency)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.id_universal }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.id_universal }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id_universal })
-                </td>
-            </tr>
-        }
-    </tbody>
+                                                @{
+                                                    <button type="button" data-color="red" class="btn bg-red" onclick='DeleteUniversal("@Html.DisplayFor(modelItem => item.id_universal )")'>Eliminar</button>
+                                                }
 
-</table>
+                                            </td>
+                                        </tr>
+                                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!--POP UP CREATE CUSTOMER-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="modProviderNew" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Creaci&oacute;n de Cuentas Virtuales</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-money fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Alta - Cuentas Virtuales
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Create", "UniversalCollection", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="col-sm-11">
+                                                    <div class="input-group input-group-lg">
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_fleet, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_fleet, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_fleet, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_account, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_account, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_account, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_clabe, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_clabe, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_clabe, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_aba, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_aba, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_aba, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_swift, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_swift, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_swift, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.uc_currency, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                        <div class="col-md-9">
+                                                            @Html.EditorFor(model => model.uc_currency, new { htmlAttributes = new { @class = "form-control" } })
+                                                            @Html.ValidationMessageFor(model => model.uc_currency, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Guardar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Inserta registro.." />
+                                                <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--# CLOSE POP UP NEW CUSTOMER-->
+    <!--POP UP EDIT-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="editUniversal" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Editar Cuentas Virtuales</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Editar - Cuentas Virtuales
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Edit", "UniversalCollection", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-11">
+                                                        <br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_fleet, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_fleet, new { htmlAttributes = new { @class = "form-control", id = "Fleet_M" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_fleet, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_account, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_account, new { htmlAttributes = new { @class = "form-control", id = "Account_M" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_account, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_clabe, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_clabe, new { htmlAttributes = new { @class = "form-control" , id = "Clabe_M"} })
+                                                                @Html.ValidationMessageFor(model => model.uc_clabe, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_aba, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_aba, new { htmlAttributes = new { @class = "form-control", id="Aba_M"} })
+                                                                @Html.ValidationMessageFor(model => model.uc_aba, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_swift, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_swift, new { htmlAttributes = new { @class = "form-control" , id = "Swift_M"} })
+                                                                @Html.ValidationMessageFor(model => model.uc_swift, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_currency, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_currency, new { htmlAttributes = new { @class = "form-control", id = "Currency_M" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_currency, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Actualizar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Actualiza el registro.." />
+                                                <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--#POP UP EDIT-->
+    <!--POP UP DELETE-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="deleteUniversal" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Eliminar Cuentas Virtuales</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Eliminar - Cuentas Virtuales
+                                            </a>
+                                        </h4>
+                                        <h3>Esta seguro que desea eliminar este cuenta virtual?</h3>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Delete", "UniversalCollection", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-11">
+                                                        <br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_fleet, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_fleet, new { htmlAttributes = new { @class = "form-control", id = "Fleet_D" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_fleet, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_account, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_account, new { htmlAttributes = new { @class = "form-control", id = "Account_D" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_account, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_clabe, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_clabe, new { htmlAttributes = new { @class = "form-control", id = "Clabe_D" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_clabe, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_aba, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_aba, new { htmlAttributes = new { @class = "form-control", id = "Aba_D" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_aba, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_swift, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_swift, new { htmlAttributes = new { @class = "form-control", id = "Swift_D" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_swift, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.uc_currency, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.uc_currency, new { htmlAttributes = new { @class = "form-control", id = "Currency_D" } })
+                                                                @Html.ValidationMessageFor(model => model.uc_currency, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Eliminar" class="btn bg-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar el registro.." />
+                                                <button type="button" class="btn bg-blue-grey waves-effect" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--#POP UP DELETE-->
+</div>
 
 @section Scripts{
-
     @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
     @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+    @Scripts.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.min.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/dialogs.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/tooltips-popovers.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/modals.js")
+    @Scripts.Render("~/Scripts/Views/Catalogs/Universal.js")
+    <script type="text/javascript">
+        $(function () {
+            $('#grdProvider').DataTable();
+            var message = '@ViewBag.Message';
+            var warning = '@ViewBag.Warning';
+            if (message.length > 0) {
+                swal({
+                    title: "Cuentas virtuales",
+                    text: message,
+                    type: "success",
+                    closeOnCancel: false
+                });
+            }
+            if (warning.length > 0) {
+                swal({
+                    title: "Cuentas virtuales",
+                    text: warning,
+                    type: "warning",
+                    closeOnCancel: false
+                });
+            }
 
-    <script>
-    $(function () {
-        $('#example').DataTable();
-    });
+        });
+
     </script>
+
 }

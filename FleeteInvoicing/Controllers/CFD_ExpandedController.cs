@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using FleeteInvoicing.Models;
 using System.Threading.Tasks;
+using System;
 
 namespace FleeteInvoicing.Controllers
 {
@@ -14,22 +14,11 @@ namespace FleeteInvoicing.Controllers
         [CustomAuthorize(Roles = "ExpandedView",NotifyUrl = "/Error/Unauthorized")]
         public async Task<ActionResult> Index()
         {
-            return View(await db.CFD_EXPANDED_ADDRESS1.ToListAsync());
-        }
-
-        [CustomAuthorize(Roles = "ExpandedView", NotifyUrl = "/Error/Unauthorized")]
-        public async Task<ActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CFD_EXPANDED_ADDRESS1 cFD_EXPANDED_ADDRESS1 = await db.CFD_EXPANDED_ADDRESS1.FindAsync(id);
-            if (cFD_EXPANDED_ADDRESS1 == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cFD_EXPANDED_ADDRESS1);
+            TempData["Customers"] = await db.CFD_EXPANDED_ADDRESS.OrderBy(s => s.CUSTNAME).ToListAsync();
+            ViewBag.Warning = Session["MessageWarning"] == null ? null : Session["MessageWarning"].ToString();
+            ViewBag.Message = Session["Message"] == null ? null : Session["Message"].ToString();
+            Session.Clear();
+            return View();
         }
 
         [CustomAuthorize(Roles = "ExpandedCreate", NotifyUrl = "/Error/Unauthorized")]
@@ -38,70 +27,144 @@ namespace FleeteInvoicing.Controllers
             return View();
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Post)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "CUSTID,CORP_CD,CNTC_NO,ADDRESS1,ADDRESS2,ADDRESS3,CITY,STATE,ZIP,CUSTNAME,RFC,PAYMENT_METHOD_TYPE,CFDI_USAGE")] CFD_EXPANDED_ADDRESS1 cFD_EXPANDED_ADDRESS1)
+        public async Task<ActionResult> Create([Bind(Include = "CUSTID,CORP_CD,CNTC_NO,ADDRESS1,ADDRESS2,ADDRESS3,CITY,STATE,ZIP,CUSTNAME,RFC,PAYMENT_METHOD_TYPE")] CFD_EXPANDED_ADDRESS CFD_Expanded_Address)
         {
             if (ModelState.IsValid)
             {
-                db.CFD_EXPANDED_ADDRESS1.Add(cFD_EXPANDED_ADDRESS1);
+                db.CFD_EXPANDED_ADDRESS.Add(CFD_Expanded_Address);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(cFD_EXPANDED_ADDRESS1);
+            return View(CFD_Expanded_Address);
         }
 
+        [HttpPost]
         [CustomAuthorize(Roles = "ExpandedEdit", NotifyUrl = "/Error/Unauthorized")]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<JsonResult> Editing(string id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Session["CustomerID"] = id;
+                var customer = await db.CFD_EXPANDED_ADDRESS.FindAsync(id);
+                CFD_EXPANDED_ADDRESS expanded = new CFD_EXPANDED_ADDRESS()
+                {
+                     CUSTID = customer.CUSTID,
+                     CORP_CD = customer.CORP_CD,
+                     CNTC_NO = customer.CNTC_NO,
+                     ADDRESS1 = customer.ADDRESS1,
+                     ADDRESS2 = customer.ADDRESS2,
+                     ADDRESS3 = customer.ADDRESS3,
+                     CITY = customer.CITY,
+                     STATE = customer.STATE,
+                     ZIP = customer.ZIP,
+                     CUSTNAME = customer.CUSTNAME ,
+                     RFC = customer.RFC,
+                     PAYMENT_METHOD_TYPE = customer.PAYMENT_METHOD_TYPE,
+                };
+                return new JsonResult
+                {
+                    Data = expanded,
+                    MaxJsonLength = int.MaxValue,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
             }
-            CFD_EXPANDED_ADDRESS1 cFD_EXPANDED_ADDRESS1 = await db.CFD_EXPANDED_ADDRESS1.FindAsync(id);
-            if (cFD_EXPANDED_ADDRESS1 == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                throw new Exception(string.Format("Error:[Editing] :: {0} ", ex.Message));
             }
-            return View(cFD_EXPANDED_ADDRESS1);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "CUSTID,CORP_CD,CNTC_NO,ADDRESS1,ADDRESS2,ADDRESS3,CITY,STATE,ZIP,CUSTNAME,RFC,PAYMENT_METHOD_TYPE,CFDI_USAGE")] CFD_EXPANDED_ADDRESS1 cFD_EXPANDED_ADDRESS1)
+        public async Task<ActionResult> Edit([Bind(Include = "CUSTID,CORP_CD,CNTC_NO,ADDRESS1,ADDRESS2,ADDRESS3,CITY,STATE,ZIP,CUSTNAME,RFC,PAYMENT_METHOD_TYPE")] CFD_EXPANDED_ADDRESS CFD_Expanded_Address)
         {
-            if (ModelState.IsValid)
+            if (Session["CustomerID"] != null)
             {
-                db.Entry(cFD_EXPANDED_ADDRESS1).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                string CustomerID = Session["CustomerID"].ToString();
+          
+                if (!String.IsNullOrWhiteSpace(CustomerID))
+                {
+                    if (ModelState.IsValid)
+                    {
+                        CFD_Expanded_Address.CUSTID = CustomerID;
+                        db.Entry(CFD_Expanded_Address).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        Session["MessageWarning"] = "Se actualizo la informacion correctamente !! ";
+                    }
+                }
+                else
+                {
+                    Session["MessageWarning"] = "No se pudo actualizar el cliente, Comunicate con el administrador del sistema.";
+                }
             }
-            return View(cFD_EXPANDED_ADDRESS1);
+
+            return RedirectToAction("Index");
         }
 
         [CustomAuthorize(Roles = "ExpandedDelete", NotifyUrl = "/Error/Unauthorized")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<JsonResult> Deleting(string id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Session["CustomerID"] = id;
+                var customer = await db.CFD_EXPANDED_ADDRESS.FindAsync(id);
+                CFD_EXPANDED_ADDRESS expanded = new CFD_EXPANDED_ADDRESS()
+                {
+                    CUSTID = customer.CUSTID,
+                    CORP_CD = customer.CORP_CD,
+                    CNTC_NO = customer.CNTC_NO,
+                    ADDRESS1 = customer.ADDRESS1,
+                    ADDRESS2 = customer.ADDRESS2,
+                    ADDRESS3 = customer.ADDRESS3,
+                    CITY = customer.CITY,
+                    STATE = customer.STATE,
+                    ZIP = customer.ZIP,
+                    CUSTNAME = customer.CUSTNAME,
+                    RFC = customer.RFC,
+                    PAYMENT_METHOD_TYPE = customer.PAYMENT_METHOD_TYPE,
+                };
+
+                return new JsonResult
+                {
+                    Data = expanded,
+                    MaxJsonLength = int.MaxValue,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
             }
-            CFD_EXPANDED_ADDRESS1 cFD_EXPANDED_ADDRESS1 = await db.CFD_EXPANDED_ADDRESS1.FindAsync(id);
-            if (cFD_EXPANDED_ADDRESS1 == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                throw new Exception(string.Format("Error:[Deleting] :: {0} ", ex.Message));
             }
-            return View(cFD_EXPANDED_ADDRESS1);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            CFD_EXPANDED_ADDRESS1 cFD_EXPANDED_ADDRESS1 = db.CFD_EXPANDED_ADDRESS1.Find(id);
-            db.CFD_EXPANDED_ADDRESS1.Remove(cFD_EXPANDED_ADDRESS1);
-            await db.SaveChangesAsync();
+
+            if (Session["CustomerID"] != null)
+            {
+                string CustomerID = Session["CustomerID"].ToString();
+
+                if (!String.IsNullOrWhiteSpace(CustomerID))
+                {
+                    if (ModelState.IsValid)
+                    {
+                        CFD_EXPANDED_ADDRESS CFD_Expanded_Address = db.CFD_EXPANDED_ADDRESS.Find(CustomerID);
+                        db.CFD_EXPANDED_ADDRESS.Remove(CFD_Expanded_Address);
+                        await db.SaveChangesAsync();
+                        Session["MessageWarning"] = "Se elimino el cliente correctamente !! ";
+                    }
+                }
+                else
+                {
+                    Session["MessageWarning"] = "No se pudo eliminar el cliente, Comunicate con el administrador del sistema …… ";
+                }
+            }
+
             return RedirectToAction("Index");
         }
 

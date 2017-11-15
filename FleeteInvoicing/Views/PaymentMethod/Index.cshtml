@@ -1,54 +1,304 @@
-﻿@model IEnumerable<FleeteInvoicing.Models.CAT_PAYMENTMETHODTYPE>
+﻿@Styles.Render("~/MaterialDesign/css/pulse.css")
+@Styles.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.css")
+@Styles.Render("~/MaterialDesign/plugins/bootstrap-select/css/bootstrap-select.css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
 
+@model FleeteInvoicing.Entities.PaymentMethod
 @{
-    ViewBag.Title = "Index";
+    IEnumerable<FleeteInvoicing.Models.CAT_PAYMENTMETHODTYPE> paymentMethod = TempData["PaymentMethod"] as IEnumerable<FleeteInvoicing.Models.CAT_PAYMENTMETHODTYPE>;
 }
+<style type="text/css">
+    #layoutFleet {
+        margin-left: 0%;
+    }
+</style>
 
-<h2>Index</h2>
-<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div align="left">
+    <div id="vmProvider" class="container-fluid">
+        <div class="block-header">
+            <h2><b>Cat&iacute;logo de M&eacute;todos de Pago</b></h2>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            @Html.ActionLink("Crear Metodo de Pago", "#", null, new { data_toggle = "modal", data_target = "#modProviderNew" })
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Index", "PaymentMethod", FormMethod.Post, new { role = "form" })) { }
+                    </div>
+                    <div class="body">
+                        <div id="area_tabla">
+                            <table id="grdProvider" role="grid" class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <tr style="background-color:#757575;color:#fff;" role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1" aria-sort="ascending" style="width: 300px;"># PAYMENT METHOD CODE</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:400px;">DESCRIPCION</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:450px;">ADMINISTRACION</th>
+                                     </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in paymentMethod)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.paymentMethodTypeCode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.paymentMethodDesc)
+                                            </td>
+                                            <td>
+                                                @{
+                                                    <button type="button" data-color="white" class="btn bg-blue-grey waves-effect" onclick='EditPayment("@Html.DisplayFor(modelItem => item.paymentMethodTypeId)")'>Modificar</button>
+                                                }
 
-<table id="paymentMethod" class="display" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th>
-                Payment Method Code
-            </th>
-            <th>
-                Description
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.paymentMethodTypeCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.paymentMethodDesc)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.paymentMethodTypeId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.paymentMethodTypeId })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                                                @{
+                                                    <button type="button" data-color="red" class="btn bg-red" onclick='DeletePayment("@Html.DisplayFor(modelItem => item.paymentMethodTypeId )")'>Eliminar</button>
+                                                }
+
+                                            </td>
+                                        </tr>
+                                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--POP UP CREATE CUSTOMER-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="modProviderNew" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Creaci&oacute;n de M&eacute;todos de pago</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-money fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Alta - M&eacute;todos de pago
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Create", "PaymentMethod", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="col-sm-11">
+                                                    <div class="input-group input-group-lg">
+         
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.paymentMethodTypeCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.paymentMethodTypeCode, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.paymentMethodTypeCode, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.paymentMethodDesc, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.paymentMethodDesc, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.paymentMethodDesc, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Guardar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Inserta registro.." />
+                                                <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--# CLOSE POP UP NEW CUSTOMER-->
+    <!--POP UP EDIT-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="editPayment" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Editar M&eacute;todos de pago</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Editar - M&eacute;todos de pago
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Edit", "PaymentMethod", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-11">
+                                                        <br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.paymentMethodTypeCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.paymentMethodTypeCode, new { htmlAttributes = new { @class = "form-control", id = "PMCODE_M" } })
+                                                                @Html.ValidationMessageFor(model => model.paymentMethodTypeCode, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.paymentMethodDesc, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.paymentMethodDesc, new { htmlAttributes = new { @class = "form-control", id = "PMDESC_M" } })
+                                                                @Html.ValidationMessageFor(model => model.paymentMethodDesc, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Actualizar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Actualiza el registro.." />
+                                                <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--#POP UP EDIT-->
+    <!--POP UP DELETE-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="deletePayment" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Eliminar M&eacute;todos de pago</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Eliminar - M&eacute;todos de pago
+                                            </a>
+                                        </h4>
+                                        <h3>Esta seguro que desea eliminar este cliente?</h3>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Delete", "PaymentMethod", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-11">
+                                                        <br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.paymentMethodTypeCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.paymentMethodTypeCode, new { htmlAttributes = new { @class = "form-control", id = "PMCODE_D" } })
+                                                                @Html.ValidationMessageFor(model => model.paymentMethodTypeCode, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.paymentMethodDesc, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.paymentMethodDesc, new { htmlAttributes = new { @class = "form-control", id = "PMDESC_D", maxlength = "15" } })
+                                                                @Html.ValidationMessageFor(model => model.paymentMethodDesc, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Eliminar" class="btn bg-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar el registro.." />
+                                                <button type="button" class="btn bg-blue-grey waves-effect" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--#POP UP DELETE-->
+</div>
 
 @section Scripts{
-
     @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
     @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+    @Scripts.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.min.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/dialogs.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/tooltips-popovers.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/modals.js")
+    @Scripts.Render("~/Scripts/Views/Catalogs/paymentMethod.js")
+    <script type="text/javascript">
+        $(function () {
+            $('#grdProvider').DataTable();
+            var message = '@ViewBag.Message';
+            var warning = '@ViewBag.Warning';
+            if (message.length > 0) {
+                swal({
+                    title: "Métodos de Pago!",
+                    text: message,
+                    type: "success",
+                    closeOnCancel: false
+                });
+            }
+            if (warning.length > 0) {
+                swal({
+                    title: "Métodos de Pago!",
+                    text: warning,
+                    type: "warning",
+                    closeOnCancel: false
+                });
+            }
 
-    <script>
-    $(function () {
-        $('#paymentMethod').DataTable();
-    });
+        });
+
     </script>
+
 }
+
+

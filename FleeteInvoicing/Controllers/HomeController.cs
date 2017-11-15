@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace FleeteInvoicing.Controllers
 {
@@ -21,7 +17,7 @@ namespace FleeteInvoicing.Controllers
 
         public ActionResult Unauthorized()
         {
-            ViewBag.Message = "You don´t have enough priviledges for this module.";
+            ViewBag.Message = "Usted no tiene acceso a esta seccion. Consulte al administrador.";
             return View();
         }
 

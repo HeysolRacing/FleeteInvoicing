@@ -6,7 +6,7 @@ namespace FleeteInvoicing
 {
     public class CustomAuthorize : AuthorizeAttribute
     {
-        private string _notifyUrl = "/Home/Contact";
+        private string _notifyUrl = "/Error/Unauthorized";
 
         public string NotifyUrl
         {
@@ -16,8 +16,7 @@ namespace FleeteInvoicing
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            //filterContext.Result = new HttpUnauthorizedResult(); // Try this but i'm not sure
-            //filterContext.Result = new RedirectResult("/Error/Unauthorized");
+
         }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
@@ -47,17 +46,6 @@ namespace FleeteInvoicing
                 // Redirect to Login page.
                 HandleUnauthorizedRequest(filterContext);
             }
-
-
-
-            //if (this.AuthorizeCore(filterContext.HttpContext))
-            //{
-            //    base.OnAuthorization(filterContext);
-            //}
-            //else
-            //{
-            //    HandleUnauthorizedRequest(filterContext);
-            //}
         }
     }
 }

@@ -1,120 +1,573 @@
-﻿@model IEnumerable<FleeteInvoicing.Models.CFD_EXPANDED_ADDRESS1>
+﻿@Styles.Render("~/MaterialDesign/css/pulse.css")
+@Styles.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.css")
+@Styles.Render("~/MaterialDesign/plugins/bootstrap-select/css/bootstrap-select.css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
 
+@model FleeteInvoicing.Entities.Expanded
 @{
-    ViewBag.Title = "Index";
+    IEnumerable<FleeteInvoicing.Models.CFD_EXPANDED_ADDRESS> customers = TempData["Customers"] as IEnumerable<FleeteInvoicing.Models.CFD_EXPANDED_ADDRESS>;
 }
+<style type="text/css">
+    #layoutFleet {
+        margin-left: 0%;
+    }
+</style>
 
-<h2>Index</h2>
-<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div align="left">
+    <div id="vmProvider" class="container-fluid">
+        <div class="block-header">
+            <h2><b>Catálogo de Clientes</b></h2>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            @Html.ActionLink("Crear Cliente", "#", null, new { data_toggle = "modal", data_target = "#modProviderNew" })
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Index", "CFD_Expanded", FormMethod.Post, new { role = "form" })) { }
+                    </div>
+                    <div class="body">
+                        <div id="area_tabla">
+                            <table id="grdProvider" role="grid" class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <tr style="background-color:#757575;color:#fff;" role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1" aria-sort="ascending" style="width: 300px;">#CUSTOMER</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:70px;">RFC</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:30px;">CORP CODE</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:50px;">CNTC_NO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:180px;">ADDRESS 1</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:180px;">ADDRESS 2</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:180px;">ADDRESS 3</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:100px;">CITY</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:60px;">STATE</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:60px;">ZIP</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:30px;">PAYMENT METHOD</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:450px;">ADMINISTRACION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   @foreach (var item in customers)
+                                   {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CUSTNAME)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.RFC)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CORP_CD)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CNTC_NO)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ADDRESS1)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ADDRESS2)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ADDRESS3)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CITY)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.STATE)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ZIP)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.PAYMENT_METHOD_TYPE)
+                                        </td>
+                                        <td>
+                                            @{
+                                                <button type="button" data-color="white" class="btn bg-blue-grey waves-effect" onclick='EditCustomer("@Html.DisplayFor(modelItem => item.CUSTID)")'>Modificar</button>
+                                            }
+
+                                            @{
+                                                <button type="button" data-color="red" class="btn bg-red" onclick='DeleteCustomer("@Html.DisplayFor(modelItem => item.CUSTID )")'>Eliminar</button>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                  }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--POP UP CREATE CUSTOMER-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="modProviderNew" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Creacion de roles</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-money fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Alta - Clientes
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Create", "CFD_Expanded", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-1 bg-blue-grey">Clientes</label>
+                                                <div class="col-sm-11">
+                                                    <div class="input-group input-group-lg">
+                                                        <span class="input-group-addon">
+                                                            <i class="material-icons red500">&#xE0BA;</i>
+                                                        </span>
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.CUSTID, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.CUSTID, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.CUSTID, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.CORP_CD, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.CORP_CD, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.CORP_CD, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.CNTC_NO, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.CNTC_NO, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.CNTC_NO, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.ADDRESS1, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.ADDRESS1, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS1, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.ADDRESS2, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.ADDRESS2, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS2, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.ADDRESS3, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.ADDRESS3, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS3, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.CITY, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.CITY, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.CITY, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.STATE, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.STATE, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.STATE, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.ZIP, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.ZIP, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.ZIP, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.CUSTNAME, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.CUSTNAME, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.CUSTNAME, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.RFC, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.RFC, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.RFC, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="">
+                                                            @Html.LabelFor(model => model.PAYMENT_METHOD_TYPE, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.PAYMENT_METHOD_TYPE, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.PAYMENT_METHOD_TYPE, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Guardar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Inserta registro.." />
+                                                <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--# CLOSE POP UP NEW CUSTOMER-->
+
+    <!--POP UP EDIT-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="modclientes" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Editar Clientes</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Editar - Cliente
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Edit", "CFD_Expanded", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-11">
+                                                        <br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.CUSTNAME, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.CUSTNAME, new { htmlAttributes = new { @class = "form-control", id = "CUSTNAME_M" } })
+                                                                @Html.ValidationMessageFor(model => model.CUSTNAME, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.RFC, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.RFC, new { htmlAttributes = new { @class = "form-control", id = "RFC_M", maxlength = "15" } })
+                                                                @Html.ValidationMessageFor(model => model.RFC, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.CORP_CD, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.CORP_CD, new { htmlAttributes = new { @class = "form-control", id = "CORP_CD_M", maxlength = "2" } })
+                                                                @Html.ValidationMessageFor(model => model.CORP_CD, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.CNTC_NO, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.CNTC_NO, new { htmlAttributes = new { @class = "form-control", id = "CNTC_NO_M", maxlength = "4" } })
+                                                                @Html.ValidationMessageFor(model => model.CNTC_NO, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ADDRESS1, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.ADDRESS1, new { htmlAttributes = new { @class = "form-control", id = "ADDRESS1_M" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS1, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ADDRESS2, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.ADDRESS2, new { htmlAttributes = new { @class = "form-control", id = "ADDRESS2_M" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS2, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ADDRESS3, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.ADDRESS3, new { htmlAttributes = new { @class = "form-control", id = "ADDRESS3_M" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS3, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.CITY, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.CITY, new { htmlAttributes = new { @class = "form-control", id = "CITY_M" } })
+                                                                @Html.ValidationMessageFor(model => model.CITY, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.STATE, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.STATE, new { htmlAttributes = new { @class = "form-control", id = "STATE_M" } })
+                                                                @Html.ValidationMessageFor(model => model.STATE, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ZIP, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.ZIP, new { htmlAttributes = new { @class = "form-control", id = "ZIP_M" } })
+                                                                @Html.ValidationMessageFor(model => model.ZIP, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.PAYMENT_METHOD_TYPE, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.PAYMENT_METHOD_TYPE, new { htmlAttributes = new { @class = "form-control", id = "PAYMENT_METHOD_TYPE_M" } })
+                                                                @Html.ValidationMessageFor(model => model.PAYMENT_METHOD_TYPE, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Actualizar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Actualiza el registro.." />
+                                                <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--#POP UP EDIT-->
+
+    <!--POP UP DELETE-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="deleteCust" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Eliminar Clientes</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Eliminar - Cliente
+                                            </a>
+                                        </h4>
+                                        <h3>Esta seguro que desea eliminar este cliente?</h3>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Delete", "CFD_Expanded", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-11">
+                                                        <br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.CUSTNAME, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.CUSTNAME, new { htmlAttributes = new { @class = "form-control", id = "CUSTNAME_D" } })
+                                                                @Html.ValidationMessageFor(model => model.CUSTNAME, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
 
 
-<table id="customers" class="display" cellspacing="0" width="100%">
-  <thead>
-    <tr>
-        <th>
-            CORP CODE
-        </th>
-        <th>
-           CNTC_NO
-        </th>
-        <th>
-            CUSTOMER
-        </th>
-        <th>
-            RFC
-        </th>
-        <th>
-            ADDRESS 1 
-        </th>
-        <th>
-            ADDRESS 2
-        </th>
-        <th>
-            ADDRESS 3
-        </th>
-        <th>
-            CITY
-        </th>
-        <th>
-            STATE 
-        </th>
-        <th>
-            ZIP
-        </th>
-        <th>
-            PAYMENT METHOD
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CFDI_USAGE)
-        </th>
-        <th></th>
-        </tr>
-  </thead>
-  <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CORP_CD)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CNTC_NO)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CUSTNAME)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RFC)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ADDRESS1)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ADDRESS2)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ADDRESS3)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CITY)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.STATE)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ZIP)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PAYMENT_METHOD_TYPE)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CFDI_USAGE)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.CUSTID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.CUSTID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.CUSTID })
-                </td>
-            </tr>
-        }
-   </tbody>
- </table>
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.RFC, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.RFC, new { htmlAttributes = new { @class = "form-control", id = "RFC_D", maxlength = "15" } })
+                                                                @Html.ValidationMessageFor(model => model.RFC, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.CORP_CD, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.CORP_CD, new { htmlAttributes = new { @class = "form-control", id = "CORP_CD_D", maxlength = "2" } })
+                                                                @Html.ValidationMessageFor(model => model.CORP_CD, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.CNTC_NO, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.CNTC_NO, new { htmlAttributes = new { @class = "form-control", id = "CNTC_NO_D", maxlength = "4" } })
+                                                                @Html.ValidationMessageFor(model => model.CNTC_NO, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ADDRESS1, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.ADDRESS1, new { htmlAttributes = new { @class = "form-control", id = "ADDRESS1_D" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS1, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ADDRESS2, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.ADDRESS2, new { htmlAttributes = new { @class = "form-control", id = "ADDRESS2_D" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS2, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ADDRESS3, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.ADDRESS3, new { htmlAttributes = new { @class = "form-control", id = "ADDRESS3_D" } })
+                                                                @Html.ValidationMessageFor(model => model.ADDRESS3, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.CITY, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.CITY, new { htmlAttributes = new { @class = "form-control", id = "CITY_D" } })
+                                                                @Html.ValidationMessageFor(model => model.CITY, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.STATE, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.STATE, new { htmlAttributes = new { @class = "form-control", id = "STATE_D" } })
+                                                                @Html.ValidationMessageFor(model => model.STATE, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ZIP, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.ZIP, new { htmlAttributes = new { @class = "form-control", id = "ZIP_D" } })
+                                                                @Html.ValidationMessageFor(model => model.ZIP, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.PAYMENT_METHOD_TYPE, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.PAYMENT_METHOD_TYPE, new { htmlAttributes = new { @class = "form-control", id = "PAYMENT_METHOD_TYPE_D" } })
+                                                                @Html.ValidationMessageFor(model => model.PAYMENT_METHOD_TYPE, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Eliminar" class="btn bg-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar el registro.." />
+                                                <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--#POP UP DELETE-->
+</div>
 
 @section Scripts{
-  
-@Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
-@Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+    @Scripts.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.min.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/dialogs.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/tooltips-popovers.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/modals.js")
+    @Scripts.Render("~/Scripts/Views/Catalogs/customers.js")
+    <script type="text/javascript">
+        $(function () {
+            $('#grdProvider').DataTable();
+            var message = '@ViewBag.Message';
+            var warning = '@ViewBag.Warning';
+            if (message.length > 0) {
+                swal({
+                    title: "Clientes!",
+                    text: message,
+                    type: "success",
+                    closeOnCancel: false
+                });
+            }
+            if (warning.length > 0) {
+                swal({
+                    title: "Clientes!",
+                    text: warning,
+                    type: "warning",
+                    closeOnCancel: false
+                });
+            }
 
-<script>
-    $(function () {
-        $('#customers').DataTable();
-    });
-</script>
+        });
+
+        function IsNumber() {
+            key = (document.all) ? event.keyCode : event.which;
+            if (key === 8) { return true; }
+            Rex = /[0-9]/;
+            KeyFin = String.fromCharCode(key);
+            return Rex.test(KeyFin);
+        }
+    </script>
+
 }
-
-
-
-

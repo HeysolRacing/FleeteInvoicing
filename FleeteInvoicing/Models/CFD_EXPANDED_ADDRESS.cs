@@ -12,7 +12,7 @@ namespace FleeteInvoicing.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CFD_EXPANDED_ADDRESS1
+    public partial class CFD_EXPANDED_ADDRESS
     {
         public string CUSTID { get; set; }
         public string CORP_CD { get; set; }
@@ -26,6 +26,5 @@ namespace FleeteInvoicing.Models
         public string CUSTNAME { get; set; }
         public string RFC { get; set; }
         public string PAYMENT_METHOD_TYPE { get; set; }
-        public string CFDI_USAGE { get; set; }
     }
 }

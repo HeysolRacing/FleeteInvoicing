@@ -67,7 +67,7 @@
           <Key>
             <PropertyRef Name="paymentMethodTypeId" />
           </Key>
-          <Property Name="paymentMethodTypeId" Type="int" Nullable="false" />
+          <Property Name="paymentMethodTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="paymentMethodTypeCode" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="paymentMethodDesc" Type="varchar" MaxLength="200" Nullable="false" />
         </EntityType>
@@ -87,7 +87,6 @@
           <Property Name="CUSTNAME" Type="nvarchar" MaxLength="150" />
           <Property Name="RFC" Type="varchar" MaxLength="17" />
           <Property Name="PAYMENT_METHOD_TYPE" Type="varchar" MaxLength="2" />
-          <Property Name="CFDI_USAGE" Type="varchar" MaxLength="3" />
         </EntityType>
         <EntityType Name="UNIVERSAL_COLLECTION">
           <Key>
@@ -260,7 +259,6 @@
       <Schema Namespace="FleeteInvoicingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="FleeteInvoicingEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CAT_PAYMENTMETHODTYPE" EntityType="FleeteInvoicingModel.CAT_PAYMENTMETHODTYPE" />
-          <EntitySet Name="CFD_EXPANDED_ADDRESS1" EntityType="FleeteInvoicingModel.CFD_EXPANDED_ADDRESS1" />
           <EntitySet Name="AspNetRoles" EntityType="FleeteInvoicingModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="FleeteInvoicingModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="FleeteInvoicingModel.AspNetUserLogin" />
@@ -285,6 +283,7 @@
           <EntitySet Name="CAT_CFDI_PRODUCTS" EntityType="FleeteInvoicingModel.CAT_CFDI_PRODUCTS" />
           <EntitySet Name="CAT_CURRENCY" EntityType="FleeteInvoicingModel.CAT_CURRENCY" />
           <EntitySet Name="UNIVERSAL_COLLECTION" EntityType="FleeteInvoicingModel.UNIVERSAL_COLLECTION" />
+          <EntitySet Name="CFD_EXPANDED_ADDRESS" EntityType="FleeteInvoicingModel.CFD_EXPANDED_ADDRESS" />
         </EntityContainer>
         <EntityType Name="CAT_PAYMENTMETHODTYPE">
           <Key>
@@ -293,24 +292,6 @@
           <Property Name="paymentMethodTypeId" Type="Int32" Nullable="false" />
           <Property Name="paymentMethodTypeCode" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="paymentMethodDesc" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="CFD_EXPANDED_ADDRESS1">
-          <Key>
-            <PropertyRef Name="CUSTID" />
-          </Key>
-          <Property Name="CUSTID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="CORP_CD" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="CNTC_NO" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="ADDRESS1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ADDRESS2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ADDRESS3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CITY" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="STATE" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="ZIP" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="CUSTNAME" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="RFC" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
-          <Property Name="PAYMENT_METHOD_TYPE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="CFDI_USAGE" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AspNetRole">
           <Key>
@@ -446,6 +427,23 @@
           <Property Name="uc_swift" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="uc_currency" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="CFD_EXPANDED_ADDRESS">
+          <Key>
+            <PropertyRef Name="CUSTID" />
+          </Key>
+          <Property Name="CUSTID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CORP_CD" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="CNTC_NO" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESS2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESS3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CITY" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="STATE" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="ZIP" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CUSTNAME" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RFC" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
+          <Property Name="PAYMENT_METHOD_TYPE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -458,25 +456,6 @@
                 <ScalarProperty Name="paymentMethodDesc" ColumnName="paymentMethodDesc" />
                 <ScalarProperty Name="paymentMethodTypeCode" ColumnName="paymentMethodTypeCode" />
                 <ScalarProperty Name="paymentMethodTypeId" ColumnName="paymentMethodTypeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CFD_EXPANDED_ADDRESS1">
-            <EntityTypeMapping TypeName="FleeteInvoicingModel.CFD_EXPANDED_ADDRESS1">
-              <MappingFragment StoreEntitySet="CFD_EXPANDED_ADDRESS">
-                <ScalarProperty Name="CFDI_USAGE" ColumnName="CFDI_USAGE" />
-                <ScalarProperty Name="PAYMENT_METHOD_TYPE" ColumnName="PAYMENT_METHOD_TYPE" />
-                <ScalarProperty Name="RFC" ColumnName="RFC" />
-                <ScalarProperty Name="CUSTNAME" ColumnName="CUSTNAME" />
-                <ScalarProperty Name="ZIP" ColumnName="ZIP" />
-                <ScalarProperty Name="STATE" ColumnName="STATE" />
-                <ScalarProperty Name="CITY" ColumnName="CITY" />
-                <ScalarProperty Name="ADDRESS3" ColumnName="ADDRESS3" />
-                <ScalarProperty Name="ADDRESS2" ColumnName="ADDRESS2" />
-                <ScalarProperty Name="ADDRESS1" ColumnName="ADDRESS1" />
-                <ScalarProperty Name="CNTC_NO" ColumnName="CNTC_NO" />
-                <ScalarProperty Name="CORP_CD" ColumnName="CORP_CD" />
-                <ScalarProperty Name="CUSTID" ColumnName="CUSTID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -553,6 +532,24 @@
                 <ScalarProperty Name="uc_account" ColumnName="uc_account" />
                 <ScalarProperty Name="uc_fleet" ColumnName="uc_fleet" />
                 <ScalarProperty Name="id_universal" ColumnName="id_universal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CFD_EXPANDED_ADDRESS">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.CFD_EXPANDED_ADDRESS">
+              <MappingFragment StoreEntitySet="CFD_EXPANDED_ADDRESS">
+                <ScalarProperty Name="PAYMENT_METHOD_TYPE" ColumnName="PAYMENT_METHOD_TYPE" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="CUSTNAME" ColumnName="CUSTNAME" />
+                <ScalarProperty Name="ZIP" ColumnName="ZIP" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="ADDRESS3" ColumnName="ADDRESS3" />
+                <ScalarProperty Name="ADDRESS2" ColumnName="ADDRESS2" />
+                <ScalarProperty Name="ADDRESS1" ColumnName="ADDRESS1" />
+                <ScalarProperty Name="CNTC_NO" ColumnName="CNTC_NO" />
+                <ScalarProperty Name="CORP_CD" ColumnName="CORP_CD" />
+                <ScalarProperty Name="CUSTID" ColumnName="CUSTID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

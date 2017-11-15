@@ -1,8 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using FleeteInvoicing.Models;
+using System.Threading.Tasks;
+using System;
 
 namespace FleeteInvoicing.Controllers
 {
@@ -10,79 +11,150 @@ namespace FleeteInvoicing.Controllers
     {
         private FleeteInvoicingEntities db = new FleeteInvoicingEntities();
 
-        public ActionResult Index()
+        [CustomAuthorize(Roles = "PaymentMethodView", NotifyUrl = "/Error/Unauthorized")]
+        public async Task<ActionResult> Index()
         {
-            return View(db.CAT_PAYMENTMETHODTYPE.ToList());
+            TempData["PaymentMethod"] = await db.CAT_PAYMENTMETHODTYPE.OrderBy(s => s.paymentMethodTypeCode).ToListAsync();
+            ViewBag.Warning = Session["MessageWarning"] == null ? null : Session["MessageWarning"].ToString();
+            ViewBag.Message = Session["Message"] == null ? null : Session["Message"].ToString();
+            Session.Clear();
+            return View();
         }
 
+        [CustomAuthorize(Roles = "PaymentMethodCreate", NotifyUrl = "/Error/Unauthorized")]
         public ActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Post)]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "paymentMethodTypeId,paymentMethodTypeCode,paymentMethodDesc")] CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE)
+        public async Task<ActionResult> Create([Bind(Include = "paymentMethodTypeCode,paymentMethodDesc")] CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE)
         {
             if (ModelState.IsValid)
             {
                 db.CAT_PAYMENTMETHODTYPE.Add(cAT_PAYMENTMETHODTYPE);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(cAT_PAYMENTMETHODTYPE);
-        }
-
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE = db.CAT_PAYMENTMETHODTYPE.Find(id);
-            if (cAT_PAYMENTMETHODTYPE == null)
-            {
-                return HttpNotFound();
-            }
             return View(cAT_PAYMENTMETHODTYPE);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "paymentMethodTypeId,paymentMethodTypeCode,paymentMethodDesc")] CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE)
+        [CustomAuthorize(Roles = "PaymentMethodEdit", NotifyUrl = "/Error/Unauthorized")]
+        public async Task<JsonResult> Editing(string id)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(cAT_PAYMENTMETHODTYPE).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                Session["PaymentID"] = id;
+                var payment = await db.CAT_PAYMENTMETHODTYPE.FindAsync(int.Parse(id));
+
+                CAT_PAYMENTMETHODTYPE paymentMethod = new CAT_PAYMENTMETHODTYPE()
+                {
+                    paymentMethodTypeCode = payment.paymentMethodTypeCode,
+                    paymentMethodDesc = payment.paymentMethodDesc,
+                };
+                return new JsonResult
+                {
+                    Data = paymentMethod,
+                    MaxJsonLength = int.MaxValue,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
             }
-            return View(cAT_PAYMENTMETHODTYPE);
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("Error:[Editing] :: {0} ", ex.Message));
+            }
+
         }
 
-        public ActionResult Delete(int? id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit([Bind(Include = "paymentMethodTypeId,paymentMethodTypeCode,paymentMethodDesc")] CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE)
         {
-            if (id == null)
+            if (Session["PaymentID"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (!String.IsNullOrWhiteSpace(Session["PaymentID"].ToString()))
+                {
+                    int paymentID = int.Parse(Session["PaymentID"].ToString());
+
+                    if (ModelState.IsValid)
+                    {
+                        cAT_PAYMENTMETHODTYPE.paymentMethodTypeId = paymentID;
+                        db.Entry(cAT_PAYMENTMETHODTYPE).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        Session["MessageWarning"] = "Se actualizo la informacion correctamente !! ";
+                    }
+                }
+                else
+                {
+                    Session["MessageWarning"] = "No se pudo actualizar el método de pago, Comunicate con el administrador del sistema.";
+                }
             }
-            CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE = db.CAT_PAYMENTMETHODTYPE.Find(id);
-            if (cAT_PAYMENTMETHODTYPE == null)
+
+            return RedirectToAction("Index");
+        }
+
+        [CustomAuthorize(Roles = "PaymentMethodDelete", NotifyUrl = "/Error/Unauthorized")]
+        public async Task<JsonResult> Deleting(string id)
+        {
+            try
             {
-                return HttpNotFound();
+                if (!String.IsNullOrWhiteSpace(id))
+                {
+                    Session["PaymentID"] = id;
+                    var payment = await db.CAT_PAYMENTMETHODTYPE.FindAsync(int.Parse(id));
+
+                    CAT_PAYMENTMETHODTYPE paymentMethod = new CAT_PAYMENTMETHODTYPE()
+                    {
+                        paymentMethodTypeCode = payment.paymentMethodTypeCode,
+                        paymentMethodDesc = payment.paymentMethodDesc,
+                    };
+                    return new JsonResult
+                    {
+                        Data = paymentMethod,
+                        MaxJsonLength = int.MaxValue,
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                    };
+                }
+                else
+                {
+                    throw new Exception("Error de comunicacion. Vuelva a intentarlo o comuniquese con el administrador. ");
+                }
             }
-            return View(cAT_PAYMENTMETHODTYPE);
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("Error:[Deleting] :: {0} ", ex.Message));
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE = db.CAT_PAYMENTMETHODTYPE.Find(id);
-            db.CAT_PAYMENTMETHODTYPE.Remove(cAT_PAYMENTMETHODTYPE);
-            db.SaveChanges();
+            if (Session["PaymentID"] != null)
+            {
+                if (!String.IsNullOrWhiteSpace(Session["PaymentID"].ToString()))
+                {
+                    int paymentID = int.Parse(Session["PaymentID"].ToString());
+
+                    if (ModelState.IsValid)
+                    {
+                        CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE = db.CAT_PAYMENTMETHODTYPE.Find(paymentID);
+                        db.CAT_PAYMENTMETHODTYPE.Remove(cAT_PAYMENTMETHODTYPE);
+                        await db.SaveChangesAsync();
+                        Session["MessageWarning"] = "Se eliminó la información correctamente !! ";
+                    }
+                }
+                else
+                {
+                    Session["MessageWarning"] = "No se pudo eliminar el método de pago, Comunicate con el administrador del sistema.";
+                }
+            }
+
             return RedirectToAction("Index");
+
         }
 
         protected override void Dispose(bool disposing)

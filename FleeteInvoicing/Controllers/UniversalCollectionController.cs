@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using FleeteInvoicing.Models;
+using System.Threading.Tasks;
 
 namespace FleeteInvoicing.Controllers
 {
@@ -14,63 +12,64 @@ namespace FleeteInvoicing.Controllers
     {
         private FleeteInvoicingEntities db = new FleeteInvoicingEntities();
 
-        [CustomAuthorize(Roles = "UniversalView")]
-        public ActionResult Index()
+        [CustomAuthorize(Roles = "UniversalView", NotifyUrl = "/Error/Unauthorized")]
+        public async Task<ActionResult> Index()
         {
-            return View(db.UNIVERSAL_COLLECTION.ToList());
+            TempData["Universal"] = await db.UNIVERSAL_COLLECTION.OrderBy(s => s.uc_fleet).ToListAsync();
+            ViewBag.Warning = Session["MessageWarning"] == null ? null : Session["MessageWarning"].ToString();
+            ViewBag.Message = Session["Message"] == null ? null : Session["Message"].ToString();
+            Session.Clear();
+            return View();
         }
 
-        [CustomAuthorize(Roles = "UniversalView")]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION = db.UNIVERSAL_COLLECTION.Find(id);
-            if (uNIVERSAL_COLLECTION == null)
-            {
-                return HttpNotFound();
-            }
-            return View(uNIVERSAL_COLLECTION);
-        }
-
-        [CustomAuthorize(Roles = "UniversalCreate")]
+        [CustomAuthorize(Roles = "UniversalCreate", NotifyUrl = "/Error/Unauthorized")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: UniversalCollection/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Post)]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id_universal,uc_fleet,uc_account,uc_clabe,uc_aba,uc_swift,uc_currency")] UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION)
+        public async Task<ActionResult> Create([Bind(Include = "uc_fleet,uc_account,uc_clabe,uc_aba,uc_swift,uc_currency")] UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION)
         {
             if (ModelState.IsValid)
             {
                 db.UNIVERSAL_COLLECTION.Add(uNIVERSAL_COLLECTION);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
             return View(uNIVERSAL_COLLECTION);
         }
 
-        [CustomAuthorize(Roles = "UniversalEdit")]
-        public ActionResult Edit(int? id)
+        [CustomAuthorize(Roles = "UniversalEdit", NotifyUrl = "/Error/Unauthorized")]
+        public async Task<JsonResult> Editing(string id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Session["UniversalID"] = id;
+                var universal = await db.UNIVERSAL_COLLECTION.FindAsync(int.Parse(id));
+
+                UNIVERSAL_COLLECTION universalcollection = new UNIVERSAL_COLLECTION()
+                {
+                    uc_fleet = universal.uc_fleet,
+                    uc_account = universal.uc_fleet,
+                    uc_clabe = universal.uc_fleet,
+                    uc_aba = universal.uc_aba,
+                    uc_swift = universal.uc_swift,
+                    uc_currency = universal.uc_currency
+                };
+                return new JsonResult
+                {
+                    Data = universal,
+                    MaxJsonLength = int.MaxValue,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
             }
-            UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION = db.UNIVERSAL_COLLECTION.Find(id);
-            if (uNIVERSAL_COLLECTION == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                throw new Exception(string.Format("Error:[Editing] :: {0} ", ex.Message));
             }
-            return View(uNIVERSAL_COLLECTION);
         }
 
         // POST: UniversalCollection/Edit/5
@@ -78,40 +77,91 @@ namespace FleeteInvoicing.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id_universal,uc_fleet,uc_account,uc_clabe,uc_aba,uc_swift,uc_currency")] UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION)
+        public async Task<ActionResult> Edit([Bind(Include = "id_universal,uc_fleet,uc_account,uc_clabe,uc_aba,uc_swift,uc_currency")] UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION)
         {
-            if (ModelState.IsValid)
+            if (Session["UniversalID"] != null)
             {
-                db.Entry(uNIVERSAL_COLLECTION).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (!String.IsNullOrWhiteSpace(Session["UniversalID"].ToString()))
+                {
+                    int universalID = int.Parse(Session["UniversalID"].ToString());
+
+                    if (ModelState.IsValid)
+                    {
+                        uNIVERSAL_COLLECTION.id_universal = universalID;
+                        db.Entry(uNIVERSAL_COLLECTION).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        Session["MessageWarning"] = "Se actualizo la informacion correctamente !! ";
+                    }
+                }
+                else
+                {
+                    Session["MessageWarning"] = "No se pudo actualizar la cuenta virtual, Comunicate con el administrador del sistema.";
+                }
             }
-            return View(uNIVERSAL_COLLECTION);
+
+            return RedirectToAction("Index");
         }
 
-        [CustomAuthorize(Roles = "UniversalDelete")]
-        public ActionResult Delete(int? id)
+        [CustomAuthorize(Roles = "UniversalDelete", NotifyUrl = "/Error/Unauthorized")]
+        public async Task<JsonResult> Deleting(string id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (!String.IsNullOrWhiteSpace(id))
+                {
+                    Session["UniversalID"] = id;
+                    var universal = await db.UNIVERSAL_COLLECTION.FindAsync(int.Parse(id));
+
+                    UNIVERSAL_COLLECTION universalcollection = new UNIVERSAL_COLLECTION()
+                    {
+                       uc_fleet = universal.uc_fleet,
+                       uc_account = universal.uc_fleet,
+                       uc_clabe = universal.uc_fleet,
+                       uc_aba = universal.uc_aba,
+                       uc_swift = universal.uc_swift,
+                       uc_currency = universal.uc_currency
+                    };
+                    return new JsonResult
+                    {
+                        Data = universal,
+                        MaxJsonLength = int.MaxValue,
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                    };
+                }
+                else
+                {
+                    throw new Exception("Error de comunicacion. Vuelva a intentarlo o comuniquese con el administrador. ");
+                }
             }
-            UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION = db.UNIVERSAL_COLLECTION.Find(id);
-            if (uNIVERSAL_COLLECTION == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                throw new Exception(string.Format("Error:[Deleting] :: {0} ", ex.Message));
             }
-            return View(uNIVERSAL_COLLECTION);
         }
 
         // POST: UniversalCollection/Delete/5
         [HttpPost, ActionName("Delete")]
+        [CustomAuthorize(Roles = "UniversalDelete", NotifyUrl = "/Error/Unauthorized")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int ? id)
         {
-            UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION = db.UNIVERSAL_COLLECTION.Find(id);
-            db.UNIVERSAL_COLLECTION.Remove(uNIVERSAL_COLLECTION);
-            db.SaveChanges();
+            if (id != null)
+            {
+                if (id > 0)
+                {
+                    UNIVERSAL_COLLECTION uNIVERSAL_COLLECTION = db.UNIVERSAL_COLLECTION.Find(id);
+                    db.UNIVERSAL_COLLECTION.Remove(uNIVERSAL_COLLECTION);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    Session["MessageWarning"] = "No se pudo actualizar la cuenta virtual, Comunicate con el administrador del sistema.";
+                }
+            }
+            else
+            {
+                Session["MessageWarning"] = "Usted no cuenta con los permisos suficientes para realizar esta accion, Comunicate con el administrador del sistema.";
+            }
             return RedirectToAction("Index");
         }
 

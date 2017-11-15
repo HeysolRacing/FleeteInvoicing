@@ -12,6 +12,7 @@ namespace FleeteInvoicing.Controllers
     {
         private FleeteInvoicingEntities db = new FleeteInvoicingEntities();
 
+        [CustomAuthorize(Roles = "Administrator", NotifyUrl = "/Error/Unauthorized")]
         public async Task<ActionResult> Index()
         {
             TempData["ROLES"] = await db.AspNetRoles.OrderBy(s => s.Name).ToListAsync();
@@ -21,6 +22,7 @@ namespace FleeteInvoicing.Controllers
             return View();
         }
 
+        [CustomAuthorize(Roles = "Administrator", NotifyUrl = "/Error/Unauthorized")]
         public ActionResult Create()
         {
             return View();
@@ -42,6 +44,7 @@ namespace FleeteInvoicing.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Roles = "Administrator", NotifyUrl = "/Error/Unauthorized")]
         public async Task<JsonResult> Editing(string id)
         {
             try
@@ -62,7 +65,7 @@ namespace FleeteInvoicing.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("Error:[GetAccount] :: {0} ", ex.Message));
+                throw new Exception(string.Format("Error:[Editing] :: {0} ", ex.Message));
             }
         }
 
@@ -83,19 +86,19 @@ namespace FleeteInvoicing.Controllers
                     {
                         db.Entry(aspNetRole).State = EntityState.Modified;
                         await db.SaveChangesAsync();
-                        Session["MessageWarning"] = string.Format("Se actualizo el registro ' {0} ' correctamente ", aspNetRole.Name);
+                        Session["MessageWarning"] = string.Format("Se actualizo el registro : {0}  correctamente... ", aspNetRole.Name);
                     }
                 }
                 else
                 {
-                    Session["MessageWarning"] = string.Format("No se pudo actualizar el rol: ' {0} ' Comunicate con el administrador del sistema …… ", aspNetRole.Name);
+                    Session["MessageWarning"] = string.Format("No se pudo actualizar el rol :  {0}  .Comunicate con el administrador del sistema …… ", aspNetRole.Name);
                 }
             }
 
             return RedirectToAction("Index");
         }
 
-        // GET: AspNetRoles/Delete/5
+        [CustomAuthorize(Roles = "Administrator", NotifyUrl = "/Error/Unauthorized")]
         public async Task<ActionResult> Delete(string id)
         {
             if (id == null)
