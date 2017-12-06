@@ -10,6 +10,7 @@
             success: function (data) {
                 if ((data !== null) && (data !== undefined))
                 {
+                    document.getElementById("CUSTID_M").value = data.CUSTID;
                     document.getElementById("CUSTNAME_M").value = data.CUSTNAME;
                     document.getElementById("CORP_CD_M").value = data.CORP_CD;
                     document.getElementById("CNTC_NO_M").value = data.CNTC_NO;

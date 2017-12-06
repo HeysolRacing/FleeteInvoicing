@@ -17,7 +17,7 @@ namespace FleeteInvoicing.Controllers
 
         public ActionResult Unauthorized()
         {
-            ViewBag.Message = "Usted no tiene acceso a esta seccion. Consulte al administrador.";
+            ViewBag.Message = "Usted no tiene acceso a esta secci&oacute;n. Consulte al administrador.";
             return View();
         }
 

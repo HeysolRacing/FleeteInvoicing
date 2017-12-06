@@ -1,31 +1,72 @@
-﻿@model IEnumerable<FleeteInvoicing.ViewModels.UserView>
+﻿@Styles.Render("~/MaterialDesign/css/pulse.css")
+@Styles.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.css")
+@Styles.Render("~/MaterialDesign/plugins/bootstrap-select/css/bootstrap-select.css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+@model IEnumerable<FleeteInvoicing.ViewModels.UserView>
 @{
     ViewBag.Title = "Index";
 }
+<style type="text/css">
+    #layoutFleet {
+        margin-left: 0%;
+    }
+</style>
 
-<h2>Permissions Manager</h2>
+<div align="left">
+    <div id="vmProvider" class="container-fluid">
+        <div class="block-header">
+            <h2><b>Permissions Manager</b></h2>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Index", "Users", FormMethod.Post, new { role = "form" })) { }
+                    </div>
+                    <div class="body">
+                        <div id="area_tabla">
+                            <table id="grdProvider" role="grid" class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <tr style="background-color:#757575;color:#fff;" role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1" aria-sort="ascending" style="width: 300px;"># USUARIO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:450px;">NOMBRE DE RED</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:300px;">ADMINISTRACION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.UserName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ADName)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Roles", "Roles", new { userID = item.UserID }, new { @class = "btn btn-info" })
+                                            </td>
+                                        </tr>
+                                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
 
-<table class="table">
-    <tr>
-        <th>
-            UserName
-        </th>
-        <th>
-            ADName
-        </th>
+@section Scripts{
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+    @Scripts.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.min.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/dialogs.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/tooltips-popovers.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/modals.js")
+    @Scripts.Render("~/Scripts/Views/Catalogs/customers.js")
 
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ADName)
-            </td>
-            <td>
-                @Html.ActionLink("Roles", "Roles", new { userID = item.UserID })
-            </td>
-        </tr>
-        }
-    </table>
+}

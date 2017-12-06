@@ -133,13 +133,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AspNetRolesController.cs" />
     <Compile Include="Controllers\CFD_ExpandedController.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\CFD_HeaderController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaymentMethodController.cs" />
     <Compile Include="Controllers\UniversalCollectionController.cs" />
     <Compile Include="AdditionalComponents\CustomAuthorize.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Entities\Expanded.cs" />
+    <Compile Include="Entities\Header.cs" />
     <Compile Include="Entities\PaymentMethod.cs" />
     <Compile Include="Entities\RolesMap.cs" />
     <Compile Include="Entities\UniversalCollection.cs" />
@@ -171,6 +174,9 @@
       <DependentUpon>FleetInvoicingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CFD_EXPANDED_ADDRESS.cs">
+      <DependentUpon>FleetInvoicingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CFD_HEADER.cs">
       <DependentUpon>FleetInvoicingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FleetInvoicingModel.Context.cs">
@@ -3605,6 +3611,7 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="Scripts\Views\Catalogs\customers.js" />
+    <Content Include="Scripts\Views\Catalogs\header.js" />
     <Content Include="Scripts\Views\Catalogs\paymentMethod.js" />
     <Content Include="Scripts\Views\Catalogs\roles.js" />
     <Content Include="Scripts\Views\Catalogs\universal.js" />
@@ -3647,20 +3654,15 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\CFD_Expanded\Details.cshtml" />
     <Content Include="Views\CFD_Expanded\Index.cshtml" />
     <Content Include="Views\Error\Unauthorized.cshtml" />
-    <Content Include="Views\UniversalCollection\Create.cshtml" />
-    <Content Include="Views\UniversalCollection\Delete.cshtml" />
-    <Content Include="Views\UniversalCollection\Details.cshtml" />
-    <Content Include="Views\UniversalCollection\Edit.cshtml" />
     <Content Include="Views\UniversalCollection\Index.cshtml" />
-    <Content Include="Views\AspNetRoles\Delete.cshtml" />
     <Content Include="Views\AspNetRoles\Index.cshtml" />
     <Content Include="Views\PaymentMethod\Index.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\AddRole.cshtml" />
     <Content Include="Views\Users\Roles.cshtml" />
+    <Content Include="Views\CFD_Header\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

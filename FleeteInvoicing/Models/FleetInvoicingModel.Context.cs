@@ -25,7 +25,6 @@ namespace FleeteInvoicing.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<CAT_PAYMENTMETHODTYPE> CAT_PAYMENTMETHODTYPE { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
@@ -35,5 +34,7 @@ namespace FleeteInvoicing.Models
         public virtual DbSet<CAT_CURRENCY> CAT_CURRENCY { get; set; }
         public virtual DbSet<UNIVERSAL_COLLECTION> UNIVERSAL_COLLECTION { get; set; }
         public virtual DbSet<CFD_EXPANDED_ADDRESS> CFD_EXPANDED_ADDRESS { get; set; }
+        public virtual DbSet<CFD_HEADER> CFD_HEADER { get; set; }
+        public virtual DbSet<CAT_PAYMENTMETHODTYPE> CAT_PAYMENTMETHODTYPE { get; set; }
     }
 }

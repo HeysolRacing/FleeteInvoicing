@@ -1,43 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace FleeteInvoicing.Entities
 {
     public class Expanded
     {
+        [Display(Name = "CLIENTE ID")]
+        [Required(ErrorMessage = "Cliente ID")]
+        [RegularExpression(@"^[M0-9]*$", ErrorMessage = "Solo M y números")]
         public string CUSTID { get; set; }
 
-        [Display(Name = "CORP CD")]
         public string CORP_CD { get; set; }
 
-        [Display(Name = "CNTC NO")]
         public string CNTC_NO { get; set; }
 
-        [Display(Name = "ADDRESS 1")]
+        [Required(ErrorMessage = "Dirección 1 es requerido.")]
+        [RegularExpression(@"^[a-zA-Z0-9\s\.\,]*$", ErrorMessage = "Solo caracteres")]
+        [Display(Name = "DIRECCION 1")]
         public string ADDRESS1 { get; set; }
 
-        [Display(Name = "ADDRESS 2")]
+        [Display(Name = "DIRECCION 2")]
         public string ADDRESS2 { get; set; }
 
-        [Display(Name = "ADDRESS 3")]
+        [Display(Name = "DIRECCION 3")]
         public string ADDRESS3 { get; set; }
 
+        [Display(Name = "CIUDAD")]
+        [Required(ErrorMessage = "Ciudad es requerido.")]
+        [RegularExpression(@"^[a-zA-Z0-9\s\.\,]*$", ErrorMessage = "Solo caracteres")]
         public string CITY { get; set; }
 
+        [Display(Name = "ESTADO")]
+        [Required(ErrorMessage = "Estado es requerido.")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Solo caracteres")]
         public string STATE { get; set; }
 
+        [Display(Name = "CODIGO POSTAL")]
+        [Required(ErrorMessage = "Codigo postal es requerido.")]
+        [StringLength(5, ErrorMessage = " {0} debe contener entre {2} a {1} caracteres", MinimumLength = 5)]
         public string ZIP { get; set; }
 
-        [Display(Name = "CUSTUMER")]
+        [Display(Name = "CLIENTE")]
+        [Required(ErrorMessage = "Cliente es requerido.")]
+        [RegularExpression(@"^[a-zA-Z0-9\s\.\,]*$", ErrorMessage = "Solo caracteres")]
         public string CUSTNAME { get; set; }
 
         [Display(Name = "RFC")]
+        [Required(ErrorMessage = "RFC es requerido.")]
+        [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Solo números y caracteres.")]
+        [StringLength(13, ErrorMessage = " {0} debe contener entre {2} a {1} caracteres", MinimumLength = 10)]
         public string RFC { get; set; }
 
-        [Display(Name = "PAYMENT METHOD TYPE")]
+        [Display(Name = "FORMA DE PAGO")]
         public string PAYMENT_METHOD_TYPE { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public string CreatedBy { get; set; }
     }
 }

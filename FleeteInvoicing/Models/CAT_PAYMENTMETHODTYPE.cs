@@ -14,8 +14,9 @@ namespace FleeteInvoicing.Models
     
     public partial class CAT_PAYMENTMETHODTYPE
     {
-        public int paymentMethodTypeId { get; set; }
         public string paymentMethodTypeCode { get; set; }
         public string paymentMethodDesc { get; set; }
+        public System.DateTime Created { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

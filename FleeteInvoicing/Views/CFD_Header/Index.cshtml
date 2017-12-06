@@ -1,0 +1,276 @@
+﻿@Styles.Render("~/MaterialDesign/css/pulse.css")
+@Styles.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.css")
+@Styles.Render("~/MaterialDesign/plugins/bootstrap-select/css/bootstrap-select.css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+@model FleeteInvoicing.Entities.Header
+@{
+    IEnumerable<FleeteInvoicing.Models.CFD_HEADER> header = TempData["CFD_Header"] as IEnumerable<FleeteInvoicing.Models.CFD_HEADER>;
+}
+<style type="text/css">
+    #layoutFleet {
+        margin-left: 0%;
+        width: 170%;
+    }
+    .fill { 
+    min-height: 130%;
+    height: 160%;
+}
+</style>
+
+
+<div align="left">
+    <div id="vmProvider" class="container-fluid">
+        <div class="block-header">
+            <h2><b>Proceso de Facturación</b></h2>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Index", "CFD_Header", FormMethod.Post, new { role = "form" })) { }
+                    </div>
+                    <div class="body">
+                        <div id="area_tabla">
+                            <table id="grdProvider" role="grid" class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                    <tr style="background-color:#757575;color:#fff;" role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1" aria-sort="ascending" style="width: 250px;"># FLOTA</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:250px;">SERIE</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:250px;">FOLIO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:250px;">FECHA FOLIO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:350px;">SUBTOTAL</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:350px;">TOTAL</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:300px;">UUID</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:150px;">IMPUESTOS</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:250px;">IMPUESTOS 2</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:350px;">DESCUENTO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:350px;">DESC DESCUENTO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:450px;">CANTIDAD</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:250px;">MONEDA</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:200px;">TIPO CAMBIO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:450px;">REFERENCIA</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:700px;">OBSERVACION 1</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:700px;">OBSERVACION 2</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:700px;">OBSERVACION 3</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:700px;">COMENTARIOS</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:150px;">CREDITO/DEBITO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:150px;">PROCESO</th>
+                                        <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:400px;">ADMINISTRACION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in header)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerFleet)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerSeries)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerFolio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerSubtotal)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerTotal)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerUUID)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerTaxes)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerTaxes2)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerDiscount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerDiscountExplanation)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerAmountLegend)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerCurrency)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerExchangeRate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerReference)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerObs1)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerObs2)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerObs3)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerComments)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerCreditDebitInd)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.headerPeriodicity)
+                                            </td>
+                                            
+                                            <td>
+                                                @{
+                                                    <button type="button" data-color="white" class="btn bg-blue-grey waves-effect" onclick='EditHeader("@Html.DisplayFor(modelItem => item.CFDUniqueID)")'>Editar</button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--POP UP EDIT-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="editHeader" tabindex="-1" role="dialog" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="modal-title" id="largeModalLabel">Editar Facturación</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-col-blue-grey">
+                                    <div class="panel-heading" role="tab" id="headingOne_1">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Editar - Facturación
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
+                                        @using (Html.BeginForm("Edit", "CFD_Header", FormMethod.Post, new { role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-danger">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-sm-11">
+                                                        <br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.headerFleet, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.headerFleet, new { htmlAttributes = new { @class = "form-control", id = "headerFleet_M", disabled = "disabled" } })
+                                                                @Html.ValidationMessageFor(model => model.headerFleet, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.headerSeries,"FACTURA NO", htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.headerSeries, new { htmlAttributes = new { @class = "form-control col-md-4", id = "headerSeries_M", disabled = "disabled" } }) 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.headerUUID, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.headerUUID, new { htmlAttributes = new { @class = "form-control", @id = "headerUUID_M" } })
+                                                                @Html.ValidationMessageFor(model => model.headerUUID, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.headerObs3, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.headerObs3, new { htmlAttributes = new { @class = "form-control", @style = "height:130px", @id = "headerObs3_M", disabled = "disabled" } })
+                                                                @Html.ValidationMessageFor(model => model.headerObs3, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.headerComments, htmlAttributes: new { @class = "control-label col-md-3" })
+                                                            <div class="col-md-9">
+                                                                @Html.EditorFor(model => model.headerComments, new { htmlAttributes = new { @class = "form-control", @id = "headerComments_M" } })
+                                                                @Html.ValidationMessageFor(model => model.headerComments, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Guardar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Guarda el registro.." />
+                                                <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--#POP UP EDIT-->
+
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+    @Scripts.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.min.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/dialogs.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/tooltips-popovers.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/modals.js")
+    @Scripts.Render("~/Scripts/Views/Catalogs/header.js")
+
+    <script type="text/javascript">
+        $(function () {
+            $('#grdProvider').DataTable();
+            var message = '@ViewBag.Message';
+            var warning = '@ViewBag.Warning';
+            if (message.length > 0) {
+                swal({
+                    title: "Facturación!",
+                    text: message,
+                    type: "success",
+                    closeOnCancel: false
+                });
+            }
+            if (warning.length > 0) {
+                swal({
+                    title: "Facturación!",
+                    text: warning,
+                    type: "warning",
+                    closeOnCancel: false
+                });
+            }
+
+        });
+
+    </script>
+
+}
+
+
+
+

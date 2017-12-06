@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using FleeteInvoicing.Models;
 using System.Threading.Tasks;
 using System;
+using System.Web;
 
 namespace FleeteInvoicing.Controllers
 {
@@ -31,14 +32,24 @@ namespace FleeteInvoicing.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "paymentMethodTypeCode,paymentMethodDesc")] CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE)
         {
-            if (ModelState.IsValid)
+            var payment = await db.CAT_PAYMENTMETHODTYPE.FindAsync(cAT_PAYMENTMETHODTYPE.paymentMethodTypeCode);
+
+            if (payment == null)
             {
-                db.CAT_PAYMENTMETHODTYPE.Add(cAT_PAYMENTMETHODTYPE);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    cAT_PAYMENTMETHODTYPE.Created = DateTime.Now;
+                    cAT_PAYMENTMETHODTYPE.CreatedBy = Environment.UserName;
+                    db.CAT_PAYMENTMETHODTYPE.Add(cAT_PAYMENTMETHODTYPE);
+                    await db.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                Session["MessageWarning"] = "La forma de pago que deseas ingresar ya existe en el sistema.";
             }
 
-            return View(cAT_PAYMENTMETHODTYPE);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -48,7 +59,7 @@ namespace FleeteInvoicing.Controllers
             try
             {
                 Session["PaymentID"] = id;
-                var payment = await db.CAT_PAYMENTMETHODTYPE.FindAsync(int.Parse(id));
+                var payment = await db.CAT_PAYMENTMETHODTYPE.FindAsync(id);
 
                 CAT_PAYMENTMETHODTYPE paymentMethod = new CAT_PAYMENTMETHODTYPE()
                 {
@@ -77,19 +88,22 @@ namespace FleeteInvoicing.Controllers
             {
                 if (!String.IsNullOrWhiteSpace(Session["PaymentID"].ToString()))
                 {
-                    int paymentID = int.Parse(Session["PaymentID"].ToString());
+                    string paymentID = Session["PaymentID"].ToString();
 
                     if (ModelState.IsValid)
                     {
-                        cAT_PAYMENTMETHODTYPE.paymentMethodTypeId = paymentID;
+                        cAT_PAYMENTMETHODTYPE.paymentMethodTypeCode = paymentID;
+                        cAT_PAYMENTMETHODTYPE.Created = DateTime.Now;
+                        cAT_PAYMENTMETHODTYPE.CreatedBy = Environment.UserName;
+
                         db.Entry(cAT_PAYMENTMETHODTYPE).State = EntityState.Modified;
                         await db.SaveChangesAsync();
-                        Session["MessageWarning"] = "Se actualizo la informacion correctamente !! ";
+                        Session["MessageWarning"] = "La forma de pago " + paymentID + " se actualizo correctamente !! ";
                     }
                 }
                 else
                 {
-                    Session["MessageWarning"] = "No se pudo actualizar el método de pago, Comunicate con el administrador del sistema.";
+                    Session["MessageWarning"] = "No se pudo actualizar el forma de pago, Comunicate con el administrador del sistema.";
                 }
             }
 
@@ -104,7 +118,7 @@ namespace FleeteInvoicing.Controllers
                 if (!String.IsNullOrWhiteSpace(id))
                 {
                     Session["PaymentID"] = id;
-                    var payment = await db.CAT_PAYMENTMETHODTYPE.FindAsync(int.Parse(id));
+                    var payment = await db.CAT_PAYMENTMETHODTYPE.FindAsync(id);
 
                     CAT_PAYMENTMETHODTYPE paymentMethod = new CAT_PAYMENTMETHODTYPE()
                     {
@@ -120,7 +134,7 @@ namespace FleeteInvoicing.Controllers
                 }
                 else
                 {
-                    throw new Exception("Error de comunicacion. Vuelva a intentarlo o comuniquese con el administrador. ");
+                    throw new Exception(HttpUtility.HtmlEncode("Error de comunicación. Vuelva a intentarlo o comuniquese con el administrador. "));
                 }
             }
             catch (Exception ex)
@@ -137,19 +151,19 @@ namespace FleeteInvoicing.Controllers
             {
                 if (!String.IsNullOrWhiteSpace(Session["PaymentID"].ToString()))
                 {
-                    int paymentID = int.Parse(Session["PaymentID"].ToString());
+                    string paymentID = Session["PaymentID"].ToString();
 
                     if (ModelState.IsValid)
                     {
                         CAT_PAYMENTMETHODTYPE cAT_PAYMENTMETHODTYPE = db.CAT_PAYMENTMETHODTYPE.Find(paymentID);
                         db.CAT_PAYMENTMETHODTYPE.Remove(cAT_PAYMENTMETHODTYPE);
                         await db.SaveChangesAsync();
-                        Session["MessageWarning"] = "Se eliminó la información correctamente !! ";
+                        Session["MessageWarning"] = HttpUtility.HtmlEncode("La forma de pago " + paymentID + " se elimino correctamente !! ");
                     }
                 }
                 else
                 {
-                    Session["MessageWarning"] = "No se pudo eliminar el método de pago, Comunicate con el administrador del sistema.";
+                    Session["MessageWarning"] = "No se pudo eliminar la forma de pago, Comunicate con el administrador del sistema.";
                 }
             }
 

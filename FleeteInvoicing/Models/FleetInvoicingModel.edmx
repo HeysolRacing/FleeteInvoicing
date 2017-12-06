@@ -65,11 +65,12 @@
         </EntityType>
         <EntityType Name="CAT_PAYMENTMETHODTYPE">
           <Key>
-            <PropertyRef Name="paymentMethodTypeId" />
+            <PropertyRef Name="paymentMethodTypeCode" />
           </Key>
-          <Property Name="paymentMethodTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="paymentMethodTypeCode" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="paymentMethodDesc" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="CFD_EXPANDED_ADDRESS">
           <Key>
@@ -87,6 +88,50 @@
           <Property Name="CUSTNAME" Type="nvarchar" MaxLength="150" />
           <Property Name="RFC" Type="varchar" MaxLength="17" />
           <Property Name="PAYMENT_METHOD_TYPE" Type="varchar" MaxLength="2" />
+          <Property Name="CREATED" Type="datetime" />
+          <Property Name="CREATEDBY" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CFD_HEADER">
+          <Key>
+            <PropertyRef Name="CFDUniqueID" />
+          </Key>
+          <Property Name="registryType" Type="char" MaxLength="2" />
+          <Property Name="CFDUniqueID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="headerSeries" Type="varchar" MaxLength="10" />
+          <Property Name="headerFolio" Type="nvarchar" MaxLength="10" />
+          <Property Name="headerDate" Type="datetime" />
+          <Property Name="headerSubtotal" Type="decimal" Precision="16" Scale="2" />
+          <Property Name="headerTotal" Type="decimal" Precision="16" Scale="2" />
+          <Property Name="headerTaxes" Type="decimal" Precision="16" Scale="2" />
+          <Property Name="headerTaxes2" Type="decimal" Precision="16" Scale="2" />
+          <Property Name="headerDiscount" Type="decimal" Precision="16" Scale="2" />
+          <Property Name="headerDiscountExplanation" Type="varchar" MaxLength="256" />
+          <Property Name="headerAmountLegend" Type="varchar" MaxLength="512" />
+          <Property Name="headerCurrency" Type="char" MaxLength="3" />
+          <Property Name="headerExchangeRate" Type="decimal" Precision="14" Scale="4" />
+          <Property Name="headerReference" Type="varchar" MaxLength="256" />
+          <Property Name="headerObs1" Type="varchar" MaxLength="512" />
+          <Property Name="headerObs2" Type="varchar" MaxLength="512" />
+          <Property Name="headerObs3" Type="varchar" MaxLength="1500" />
+          <Property Name="headerComments" Type="varchar" MaxLength="500" />
+          <Property Name="headerFleet" Type="varchar" MaxLength="30" />
+          <Property Name="headerDivision" Type="varchar" MaxLength="256" />
+          <Property Name="headerCreditDebitInd" Type="char" MaxLength="1" />
+          <Property Name="headerCorpCd" Type="varchar" MaxLength="4" />
+          <Property Name="headerInvTypeInd" Type="nvarchar" MaxLength="3" />
+          <Property Name="headerDocumentType" Type="char" MaxLength="1" />
+          <Property Name="headerPaymentMethodType" Type="char" MaxLength="1" />
+          <Property Name="headerZipCode" Type="varchar" MaxLength="9" />
+          <Property Name="headerConfirmation" Type="varchar" MaxLength="20" />
+          <Property Name="headerPaymentMethod" Type="varchar" MaxLength="256" />
+          <Property Name="headerPaymentConditions" Type="varchar" MaxLength="256" />
+          <Property Name="headerUUID" Type="varchar" MaxLength="36" />
+          <Property Name="headerParentSeries" Type="varchar" MaxLength="10" />
+          <Property Name="headerParentFolio" Type="varchar" MaxLength="10" />
+          <Property Name="headerPeriodicity" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="headerTralixStatus" Type="varchar" MaxLength="50" />
+          <Property Name="headerInternalStatus" Type="varchar" MaxLength="50" />
+          <Property Name="headerTralixStatusDate" Type="datetime" />
         </EntityType>
         <EntityType Name="UNIVERSAL_COLLECTION">
           <Key>
@@ -235,6 +280,7 @@
           <EntitySet Name="CAT_CURRENCY" EntityType="Self.CAT_CURRENCY" Schema="eInvoicing" store:Type="Tables" />
           <EntitySet Name="CAT_PAYMENTMETHODTYPE" EntityType="Self.CAT_PAYMENTMETHODTYPE" Schema="eInvoicing" store:Type="Tables" />
           <EntitySet Name="CFD_EXPANDED_ADDRESS" EntityType="Self.CFD_EXPANDED_ADDRESS" Schema="eInvoicing" store:Type="Tables" />
+          <EntitySet Name="CFD_HEADER" EntityType="Self.CFD_HEADER" Schema="eInvoicing" store:Type="Tables" />
           <EntitySet Name="UNIVERSAL_COLLECTION" EntityType="Self.UNIVERSAL_COLLECTION" Schema="eInvoicing" store:Type="Tables" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -258,7 +304,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="FleeteInvoicingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="FleeteInvoicingEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="CAT_PAYMENTMETHODTYPE" EntityType="FleeteInvoicingModel.CAT_PAYMENTMETHODTYPE" />
           <EntitySet Name="AspNetRoles" EntityType="FleeteInvoicingModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="FleeteInvoicingModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="FleeteInvoicingModel.AspNetUserLogin" />
@@ -284,15 +329,9 @@
           <EntitySet Name="CAT_CURRENCY" EntityType="FleeteInvoicingModel.CAT_CURRENCY" />
           <EntitySet Name="UNIVERSAL_COLLECTION" EntityType="FleeteInvoicingModel.UNIVERSAL_COLLECTION" />
           <EntitySet Name="CFD_EXPANDED_ADDRESS" EntityType="FleeteInvoicingModel.CFD_EXPANDED_ADDRESS" />
+          <EntitySet Name="CFD_HEADER" EntityType="FleeteInvoicingModel.CFD_HEADER" />
+          <EntitySet Name="CAT_PAYMENTMETHODTYPE" EntityType="FleeteInvoicingModel.CAT_PAYMENTMETHODTYPE" />
         </EntityContainer>
-        <EntityType Name="CAT_PAYMENTMETHODTYPE">
-          <Key>
-            <PropertyRef Name="paymentMethodTypeId" />
-          </Key>
-          <Property Name="paymentMethodTypeId" Type="Int32" Nullable="false" />
-          <Property Name="paymentMethodTypeCode" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="paymentMethodDesc" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="AspNetRole">
           <Key>
             <PropertyRef Name="Id" />
@@ -443,6 +482,59 @@
           <Property Name="CUSTNAME" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="RFC" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
           <Property Name="PAYMENT_METHOD_TYPE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="CREATED" Type="DateTime" Precision="3" />
+          <Property Name="CREATEDBY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CFD_HEADER">
+          <Key>
+            <PropertyRef Name="CFDUniqueID" />
+          </Key>
+          <Property Name="registryType" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="CFDUniqueID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="headerSeries" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="headerFolio" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="headerDate" Type="DateTime" Precision="3" />
+          <Property Name="headerSubtotal" Type="Decimal" Precision="16" Scale="2" />
+          <Property Name="headerTotal" Type="Decimal" Precision="16" Scale="2" />
+          <Property Name="headerTaxes" Type="Decimal" Precision="16" Scale="2" />
+          <Property Name="headerTaxes2" Type="Decimal" Precision="16" Scale="2" />
+          <Property Name="headerDiscount" Type="Decimal" Precision="16" Scale="2" />
+          <Property Name="headerDiscountExplanation" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="headerAmountLegend" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="headerCurrency" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="headerExchangeRate" Type="Decimal" Precision="14" Scale="4" />
+          <Property Name="headerReference" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="headerObs1" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="headerObs2" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="headerObs3" Type="String" MaxLength="1500" FixedLength="false" Unicode="false" />
+          <Property Name="headerFleet" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="headerDivision" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="headerCreditDebitInd" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="headerCorpCd" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="headerInvTypeInd" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="headerDocumentType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="headerPaymentMethodType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="headerZipCode" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Name="headerConfirmation" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="headerPaymentMethod" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="headerPaymentConditions" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="headerUUID" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="headerParentSeries" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="headerParentFolio" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="headerPeriodicity" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="headerTralixStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="headerInternalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="headerTralixStatusDate" Type="DateTime" Precision="3" />
+          <Property Name="headerComments" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CAT_PAYMENTMETHODTYPE">
+          <Key>
+            <PropertyRef Name="paymentMethodTypeCode" />
+          </Key>
+          <Property Name="paymentMethodTypeCode" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="paymentMethodDesc" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -450,15 +542,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="FleeteInvoicingModelStoreContainer" CdmEntityContainer="FleeteInvoicingEntities">
-          <EntitySetMapping Name="CAT_PAYMENTMETHODTYPE">
-            <EntityTypeMapping TypeName="FleeteInvoicingModel.CAT_PAYMENTMETHODTYPE">
-              <MappingFragment StoreEntitySet="CAT_PAYMENTMETHODTYPE">
-                <ScalarProperty Name="paymentMethodDesc" ColumnName="paymentMethodDesc" />
-                <ScalarProperty Name="paymentMethodTypeCode" ColumnName="paymentMethodTypeCode" />
-                <ScalarProperty Name="paymentMethodTypeId" ColumnName="paymentMethodTypeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="FleeteInvoicingModel.AspNetRole">
               <MappingFragment StoreEntitySet="AspNetRoles">
@@ -538,6 +621,8 @@
           <EntitySetMapping Name="CFD_EXPANDED_ADDRESS">
             <EntityTypeMapping TypeName="FleeteInvoicingModel.CFD_EXPANDED_ADDRESS">
               <MappingFragment StoreEntitySet="CFD_EXPANDED_ADDRESS">
+                <ScalarProperty Name="CREATEDBY" ColumnName="CREATEDBY" />
+                <ScalarProperty Name="CREATED" ColumnName="CREATED" />
                 <ScalarProperty Name="PAYMENT_METHOD_TYPE" ColumnName="PAYMENT_METHOD_TYPE" />
                 <ScalarProperty Name="RFC" ColumnName="RFC" />
                 <ScalarProperty Name="CUSTNAME" ColumnName="CUSTNAME" />
@@ -550,6 +635,59 @@
                 <ScalarProperty Name="CNTC_NO" ColumnName="CNTC_NO" />
                 <ScalarProperty Name="CORP_CD" ColumnName="CORP_CD" />
                 <ScalarProperty Name="CUSTID" ColumnName="CUSTID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CFD_HEADER">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.CFD_HEADER">
+              <MappingFragment StoreEntitySet="CFD_HEADER">
+                <ScalarProperty Name="headerComments" ColumnName="headerComments" />
+                <ScalarProperty Name="headerTralixStatusDate" ColumnName="headerTralixStatusDate" />
+                <ScalarProperty Name="headerInternalStatus" ColumnName="headerInternalStatus" />
+                <ScalarProperty Name="headerTralixStatus" ColumnName="headerTralixStatus" />
+                <ScalarProperty Name="headerPeriodicity" ColumnName="headerPeriodicity" />
+                <ScalarProperty Name="headerParentFolio" ColumnName="headerParentFolio" />
+                <ScalarProperty Name="headerParentSeries" ColumnName="headerParentSeries" />
+                <ScalarProperty Name="headerUUID" ColumnName="headerUUID" />
+                <ScalarProperty Name="headerPaymentConditions" ColumnName="headerPaymentConditions" />
+                <ScalarProperty Name="headerPaymentMethod" ColumnName="headerPaymentMethod" />
+                <ScalarProperty Name="headerConfirmation" ColumnName="headerConfirmation" />
+                <ScalarProperty Name="headerZipCode" ColumnName="headerZipCode" />
+                <ScalarProperty Name="headerPaymentMethodType" ColumnName="headerPaymentMethodType" />
+                <ScalarProperty Name="headerDocumentType" ColumnName="headerDocumentType" />
+                <ScalarProperty Name="headerInvTypeInd" ColumnName="headerInvTypeInd" />
+                <ScalarProperty Name="headerCorpCd" ColumnName="headerCorpCd" />
+                <ScalarProperty Name="headerCreditDebitInd" ColumnName="headerCreditDebitInd" />
+                <ScalarProperty Name="headerDivision" ColumnName="headerDivision" />
+                <ScalarProperty Name="headerFleet" ColumnName="headerFleet" />
+                <ScalarProperty Name="headerObs3" ColumnName="headerObs3" />
+                <ScalarProperty Name="headerObs2" ColumnName="headerObs2" />
+                <ScalarProperty Name="headerObs1" ColumnName="headerObs1" />
+                <ScalarProperty Name="headerReference" ColumnName="headerReference" />
+                <ScalarProperty Name="headerExchangeRate" ColumnName="headerExchangeRate" />
+                <ScalarProperty Name="headerCurrency" ColumnName="headerCurrency" />
+                <ScalarProperty Name="headerAmountLegend" ColumnName="headerAmountLegend" />
+                <ScalarProperty Name="headerDiscountExplanation" ColumnName="headerDiscountExplanation" />
+                <ScalarProperty Name="headerDiscount" ColumnName="headerDiscount" />
+                <ScalarProperty Name="headerTaxes2" ColumnName="headerTaxes2" />
+                <ScalarProperty Name="headerTaxes" ColumnName="headerTaxes" />
+                <ScalarProperty Name="headerTotal" ColumnName="headerTotal" />
+                <ScalarProperty Name="headerSubtotal" ColumnName="headerSubtotal" />
+                <ScalarProperty Name="headerDate" ColumnName="headerDate" />
+                <ScalarProperty Name="headerFolio" ColumnName="headerFolio" />
+                <ScalarProperty Name="headerSeries" ColumnName="headerSeries" />
+                <ScalarProperty Name="CFDUniqueID" ColumnName="CFDUniqueID" />
+                <ScalarProperty Name="registryType" ColumnName="registryType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CAT_PAYMENTMETHODTYPE">
+            <EntityTypeMapping TypeName="FleeteInvoicingModel.CAT_PAYMENTMETHODTYPE">
+              <MappingFragment StoreEntitySet="CAT_PAYMENTMETHODTYPE">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="paymentMethodDesc" ColumnName="paymentMethodDesc" />
+                <ScalarProperty Name="paymentMethodTypeCode" ColumnName="paymentMethodTypeCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

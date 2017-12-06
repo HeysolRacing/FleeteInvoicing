@@ -38,22 +38,26 @@ namespace FleeteInvoicing
             bundles.Add(new StyleBundle("~/Content/materialize").Include(
                             "~/Content/materialize/css/materialize.css"));
 
+
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
 
-                   "~/MaterialDesign/plugins/jquery/jquery.min.js",
-                   "~/MaterialDesign/plugins/bootstrap/js/bootstrap.js",
-                    "~/MaterialDesign/plugins/jquery-slimscroll/jquery.slimscroll.js",
-                    "~/MaterialDesign/plugins/node-waves/waves.js",
-                    "~/MaterialDesign/plugins/jquery-countto/jquery.countTo.js",
-                    "~/MaterialDesign/plugins/raphael/raphael.min.js",
-                    "~/MaterialDesign/plugins/morrisjs/morris.js",
-                    "~/MaterialDesign/plugins/chartjs/Chart.bundle.js",
-                   "~/MaterialDesign/plugins/flot-charts/jquery.flot.js",
-                   "~/MaterialDesign/plugins/flot-charts/jquery.flot.pie.js",
-                   "~/MaterialDesign/plugins/flot-charts/jquery.flot.categories.js",
-                   "~/MaterialDesign/plugins/flot-charts/jquery.flot.time.js",
-                   "~/MaterialDesign/plugins/jquery-sparkline/jquery.sparkline.js",
-                   "~/MaterialDesign/js/admin.js"));
+                     "~/MaterialDesign/plugins/jquery/jquery.min.js",
+                    "~/MaterialDesign/plugins/bootstrap/js/bootstrap.js",
+                    "~/MaterialDesign/plugins/bootstrap-select/js/bootstrap-select.js",
+                     "~/MaterialDesign/plugins/jquery-slimscroll/jquery.slimscroll.js",
+                     "~/MaterialDesign/plugins/node-waves/waves.js",
+
+                     "~/MaterialDesign/plugins/jquery-countto/jquery.countTo.js",
+                     "~/MaterialDesign/plugins/raphael/raphael.min.js",
+                     "~/MaterialDesign/plugins/morrisjs/morris.js",
+                     "~/MaterialDesign/plugins/chartjs/Chart.bundle.js",
+                    "~/MaterialDesign/plugins/flot-charts/jquery.flot.js",
+                    "~/MaterialDesign/plugins/flot-charts/jquery.flot.pie.js",
+                    "~/MaterialDesign/plugins/flot-charts/jquery.flot.categories.js",
+                    "~/MaterialDesign/plugins/flot-charts/jquery.flot.time.js",
+                    "~/MaterialDesign/plugins/jquery-sparkline/jquery.sparkline.js",
+                    "~/MaterialDesign/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js",
+                    "~/MaterialDesign/js/admin.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/materialize").Include(
                       "~/Scripts/materialize/materialize.js"));

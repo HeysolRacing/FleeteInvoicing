@@ -6,7 +6,7 @@ namespace FleeteInvoicing.Controllers
     {
         public ActionResult Unauthorized()
         {
-            ViewBag.Message = "You don´t have enough priviledges for this module.";
+            ViewBag.Message = "Usted no cuenta con los permisos para accesar a este m&oacute;dulo.";
             return View();
         }
     }

@@ -17,14 +17,14 @@
 <div align="left">
     <div id="vmProvider" class="container-fluid">
         <div class="block-header">
-            <h2><b>Cat&iacute;logo de M&eacute;todos de Pago</b></h2>
+            <h2><b>Cat&aacute;logo de Formas de Pago</b></h2>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="header">
                         <h2>
-                            @Html.ActionLink("Crear Metodo de Pago", "#", null, new { data_toggle = "modal", data_target = "#modProviderNew" })
+                            @Html.ActionLink("Crear Forma de Pago", "#", null, new { data_toggle = "modal", data_target = "#modProviderNew" })
                         </h2>
                     </div>
                     <div class="panel-body">
@@ -35,7 +35,7 @@
                             <table id="grdProvider" role="grid" class="table table-bordered table-striped table-hover dataTable">
                                 <thead>
                                     <tr style="background-color:#757575;color:#fff;" role="row">
-                                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1" aria-sort="ascending" style="width: 300px;"># PAYMENT METHOD CODE</th>
+                                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1" aria-sort="ascending" style="width: 300px;"># FORMA DE PAGO</th>
                                         <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:400px;">DESCRIPCION</th>
                                         <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:450px;">ADMINISTRACION</th>
                                      </tr>
@@ -52,16 +52,16 @@
                                             </td>
                                             <td>
                                                 @{
-                                                    <button type="button" data-color="white" class="btn bg-blue-grey waves-effect" onclick='EditPayment("@Html.DisplayFor(modelItem => item.paymentMethodTypeId)")'>Modificar</button>
+                                                    <button type="button" data-color="white" class="btn bg-blue-grey waves-effect" onclick='EditPayment("@Html.DisplayFor(modelItem => item.paymentMethodTypeCode)")'>Editar</button>
                                                 }
 
                                                 @{
-                                                    <button type="button" data-color="red" class="btn bg-red" onclick='DeletePayment("@Html.DisplayFor(modelItem => item.paymentMethodTypeId )")'>Eliminar</button>
+                                                    <button type="button" data-color="red" class="btn bg-red" onclick='DeletePayment("@Html.DisplayFor(modelItem => item.paymentMethodTypeCode )")'>Eliminar</button>
                                                 }
 
                                             </td>
                                         </tr>
-                                                    }
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -78,7 +78,7 @@
                 <div class="modal-content">
                     <div class="card">
                         <div class="header">
-                            <h4 class="modal-title" id="largeModalLabel">Creaci&oacute;n de M&eacute;todos de pago</h4>
+                            <h4 class="modal-title" id="largeModalLabel">Creaci&oacute;n de Formas de pago</h4>
                         </div>
                         <div class="modal-body">
                             <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
@@ -86,7 +86,7 @@
                                     <div class="panel-heading" role="tab" id="headingOne_1">
                                         <h4 class="panel-title">
                                             <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
-                                                <i class="fa fa-money fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Alta - M&eacute;todos de pago
+                                                <i class="fa fa-money fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Alta - Formas de pago
                                             </a>
                                         </h4>
                                     </div>
@@ -142,7 +142,7 @@
                 <div class="modal-content">
                     <div class="card">
                         <div class="header">
-                            <h4 class="modal-title" id="largeModalLabel">Editar M&eacute;todos de pago</h4>
+                            <h4 class="modal-title" id="largeModalLabel">Editar Formas de pago</h4>
                         </div>
                         <div class="modal-body">
                             <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
@@ -150,7 +150,7 @@
                                     <div class="panel-heading" role="tab" id="headingOne_1">
                                         <h4 class="panel-title">
                                             <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
-                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Editar - M&eacute;todos de pago
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Editar - Formas de pago
                                             </a>
                                         </h4>
                                     </div>
@@ -185,7 +185,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <input type="submit" value="Actualizar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Actualiza el registro.." />
+                                                <input type="submit" value="Guardar" class="btn bg-green waves-effect m-r-20" data-toggle="tooltip" data-placement="bottom" title="Guarda el registro.." />
                                                 <button type="button" class="btn btn-danger waves-effect m-r-20" data-toggle="tooltip" title="Cierra modal" data-dismiss="modal">Cerrar</button>
                                             </div>
                                         }
@@ -206,7 +206,7 @@
                 <div class="modal-content">
                     <div class="card">
                         <div class="header">
-                            <h4 class="modal-title" id="largeModalLabel">Eliminar M&eacute;todos de pago</h4>
+                            <h4 class="modal-title" id="largeModalLabel">Eliminar Formas de pago</h4>
                         </div>
                         <div class="modal-body">
                             <div class="panel-group" id="accordion_1" role="tablist" aria-multiselectable="true">
@@ -214,7 +214,7 @@
                                     <div class="panel-heading" role="tab" id="headingOne_1">
                                         <h4 class="panel-title">
                                             <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1" aria-expanded="true" aria-controls="collapseOne_1">
-                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Eliminar - M&eacute;todos de pago
+                                                <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp; Eliminar - Formas de pago
                                             </a>
                                         </h4>
                                         <h3>Esta seguro que desea eliminar este cliente?</h3>
@@ -280,7 +280,7 @@
             var warning = '@ViewBag.Warning';
             if (message.length > 0) {
                 swal({
-                    title: "Métodos de Pago!",
+                    title: "Formas de Pago!",
                     text: message,
                     type: "success",
                     closeOnCancel: false
@@ -288,7 +288,7 @@
             }
             if (warning.length > 0) {
                 swal({
-                    title: "Métodos de Pago!",
+                    title: "Formas de Pago!",
                     text: warning,
                     type: "warning",
                     closeOnCancel: false

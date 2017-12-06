@@ -8,8 +8,6 @@
             async: true,
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                debugger;
-                console.log(data);
                 if ((data !== null) && (data !== undefined)) {
                     document.getElementById("rolName").value = data.Name;
                     $("#modProvider").modal();
@@ -23,6 +21,32 @@
         });
     } else {
         MessageWarning('Ingrese mas Tarde o comuniquese con el encargado del sistema ');
+    }
+}
+
+function DeleteRol(id) {
+    if (id !== 0) {
+        var jsonMapping = JSON.stringify({ id: id });
+        $.ajax({
+            type: "POST",
+            url: "/AspNetRoles/Deleting",
+            data: jsonMapping,
+            async: true,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if ((data !== null) && (data !== undefined)) {
+                    document.getElementById("rolName_D").value = data.Name;
+                    $("#deleteRol").modal();
+                } else {
+                    ErrorMessages("No existe el cliente");
+                }
+            }, error: function (xhr) {
+                ErrorMessages('Error en la comunicación del servidor: ' + xhr.status);
+                console.log('Error en la comunicación del servidor: ' + xhr.status);
+            }
+        });
+    } else {
+        MessageWarning('Ingrese mas tarde o comuniquese con el encargado del sistema ');
     }
 }
 

@@ -58,6 +58,7 @@ namespace FleeteInvoicing.Controllers
             var userView = new UserView
             {
                 UserID = user.Id,
+                UserName = user.UserName,
                 Roles = rolesView
             };
 

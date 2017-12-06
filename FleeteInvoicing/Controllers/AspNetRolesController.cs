@@ -99,20 +99,30 @@ namespace FleeteInvoicing.Controllers
         }
 
         [CustomAuthorize(Roles = "Administrator", NotifyUrl = "/Error/Unauthorized")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<JsonResult> Deleting(string id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Session["RoleID"] = id;
+                var aspNetRole = await db.AspNetRoles.FindAsync(id);
+
+                AspNetRole rol = new AspNetRole()
+                {
+                    Id = aspNetRole.Id,
+                    Name = aspNetRole.Name
+                };
+
+                return new JsonResult
+                {
+                    Data = rol,
+                    MaxJsonLength = int.MaxValue,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
             }
-
-            AspNetRole aspNetRole = await db.AspNetRoles.FindAsync(id);
-
-            if (aspNetRole == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                throw new Exception(string.Format("Error:[Editing] :: {0} ", ex.Message));
             }
-            return View(aspNetRole);
         }
 
         // POST: AspNetRoles/Delete/5
@@ -120,9 +130,25 @@ namespace FleeteInvoicing.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            AspNetRole aspNetRole = await db.AspNetRoles.FindAsync(id);
-            db.AspNetRoles.Remove(aspNetRole);
-            await db.SaveChangesAsync();
+            if (Session["RoleID"] != null)
+            {
+                if (!String.IsNullOrWhiteSpace(Session["RoleID"].ToString()))
+                {
+                    id = Session["RoleID"].ToString();
+                    if (ModelState.IsValid)
+                    {
+                        AspNetRole aspNetRole = await db.AspNetRoles.FindAsync(id);
+                        db.AspNetRoles.Remove(aspNetRole);
+                        await db.SaveChangesAsync();
+                        Session["MessageWarning"] = "Se elimin&oacute; la informaci&oacute;n correctamente !! ";
+                    }
+                }
+                else
+                {
+                    Session["MessageWarning"] = "No se pudo eliminar el rol, Comunicate con el administrador del sistema.";
+                }
+            }
+
             return RedirectToAction("Index");
         }
 

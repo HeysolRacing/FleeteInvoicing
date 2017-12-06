@@ -26,5 +26,7 @@ namespace FleeteInvoicing.Models
         public string CUSTNAME { get; set; }
         public string RFC { get; set; }
         public string PAYMENT_METHOD_TYPE { get; set; }
+        public Nullable<System.DateTime> CREATED { get; set; }
+        public string CREATEDBY { get; set; }
     }
 }

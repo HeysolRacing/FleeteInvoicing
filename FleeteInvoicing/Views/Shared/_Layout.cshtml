@@ -56,19 +56,19 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Catálogos<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Clientes</span>", "Index", "CFD_Expanded", null, null) </li>
                             <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Cuentas Virtuales</span>",  "Index", "UniversalCollection", null, null) </li>
-                            <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Metodo de Pago</span>", "Index", "PaymentMethod", null, null) </li>
+                            <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Forma de Pago</span>", "Index", "PaymentMethod", null, null) </li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fleet eInvoicing<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>Process</li>
+                            <li>@Html.RawActionLink("<i class='fa fa-folder fa-2x' aria-hidden='true'></i> <span>Proceso Facturación</span>", "Index", "CFD_Header", null, null) </li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -79,7 +79,7 @@
                         </ul>
                     </li>
                 </ul>
-                <p class="nav navbar-text navbar-right">Hello, @User.Identity.Name!</p>
+                <p class="nav navbar-text navbar-right">Hola, @User.Identity.Name!</p>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
     <footer class="body-content footer-theme-black">
 
         <div class="copyright">
-            &copy;<span>@DateTime.Now.Year </span> <a href="javascript:void(0);">Fleet Invoicing CDMX...</a>
+            &copy;<span>@DateTime.Now.Year </span> <a href="javascript:void(0);">Fleet Invoicing.</a>
         </div>
         <div class="version">
             <b>Version: </b> 1.0.0

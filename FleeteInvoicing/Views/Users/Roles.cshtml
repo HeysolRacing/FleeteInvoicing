@@ -1,33 +1,73 @@
-﻿@model FleeteInvoicing.ViewModels.UserView
+﻿@Styles.Render("~/MaterialDesign/css/pulse.css")
+@Styles.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.css")
+@Styles.Render("~/MaterialDesign/plugins/bootstrap-select/css/bootstrap-select.css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+@model FleeteInvoicing.ViewModels.UserView
 @{
     ViewBag.Title = "Roles";
 }
 
-<h2>Roles for user : @Model.UserName</h2>
-<h3>@ViewBag.Error</h3>
-
-<p>
-    @Html.ActionLink("Add Role", "AddRole", new { userID = Model.UserID }, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Back to list", "Index", new { }, new { @class = "btn btn-info" })
-</p>
-
-<table class="table">
-    <tr>
-        <th>
-            Name
-        </th>
-    </tr>
-
-    @for (int i = 0; i < Model.Roles.Count; i++)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => Model.Roles[i].Name)
-            </td>
-            <td>
-                @Html.ActionLink("Delete", "Delete", new { userID = Model.UserID, roleID = Model.Roles[i].RoleID })
-            </td>
-        </tr>
+<style type="text/css">
+    #layoutFleet {
+        margin-left: 0%;
     }
+</style>
 
-</table>
+<div align="left">
+    <div id="vmProvider" class="container-fluid">
+        <div class="block-header">
+            <h2><b>Roles para el usuario : @Model.UserName</b></h2>
+            <h3>@ViewBag.Error</h3>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        @Html.ActionLink("Add Role", "AddRole", new { userID = Model.UserID }, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Back to list", "Index", new { }, new { @class = "btn btn-info" })
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Index", "Users", FormMethod.Post, new { role = "form" })) { }
+                    </div>
+                    <div class="body">
+                        <table id="grdProvider" role="grid" class="table table-bordered table-striped table-hover dataTable">
+                            <thead>
+                                <tr style="background-color:#757575;color:#fff;" role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1" aria-sort="ascending" style="width: 300px;"># ACCESO</th>
+                                    <th class="sorting" tabindex="0" rowspan="1" colspan="1" style="width:450px;">NOMBRE DE RED</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Roles.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => Model.Roles[i].Name)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Delete", "Delete", new { userID = Model.UserID, roleID = Model.Roles[i].RoleID }, new { @class = "btn btn-danger" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/jquery.dataTables.pagination.js")
+    @Scripts.Render("~/MaterialDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js")
+    @Scripts.Render("~/MaterialDesign/plugins/sweetalert/sweetalert.min.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/dialogs.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/tooltips-popovers.js")
+    @Scripts.Render("~/MaterialDesign/js/pages/ui/modals.js")
+    @Scripts.Render("~/Scripts/Views/Catalogs/customers.js")
+
+}
+

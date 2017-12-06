@@ -8,8 +8,6 @@
             async: true,
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                debugger;
-                console.log(data);
                 if ((data !== null) && (data !== undefined)) {
                     document.getElementById("PMCODE_M").value = data.paymentMethodTypeCode;
                     document.getElementById("PMDESC_M").value = data.paymentMethodDesc;
@@ -38,8 +36,6 @@ function DeletePayment(id) {
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 if ((data !== null) && (data !== undefined)) {
-                    debugger;
-                    console.log(data);
                     document.getElementById("PMCODE_D").value = data.paymentMethodTypeCode;
                     document.getElementById("PMDESC_D").value = data.paymentMethodDesc;
                     $("#deletePayment").modal();

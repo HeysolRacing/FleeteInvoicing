@@ -61,7 +61,7 @@ namespace FleeteInvoicing.Controllers
                 };
                 return new JsonResult
                 {
-                    Data = universal,
+                    Data = universalcollection,
                     MaxJsonLength = int.MaxValue,
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
@@ -90,7 +90,7 @@ namespace FleeteInvoicing.Controllers
                         uNIVERSAL_COLLECTION.id_universal = universalID;
                         db.Entry(uNIVERSAL_COLLECTION).State = EntityState.Modified;
                         await db.SaveChangesAsync();
-                        Session["MessageWarning"] = "Se actualizo la informacion correctamente !! ";
+                        Session["MessageWarning"] = "Se actualiz&oacute; la informaci&oacute;n correctamente !! ";
                     }
                 }
                 else
@@ -123,14 +123,14 @@ namespace FleeteInvoicing.Controllers
                     };
                     return new JsonResult
                     {
-                        Data = universal,
+                        Data = universalcollection,
                         MaxJsonLength = int.MaxValue,
                         JsonRequestBehavior = JsonRequestBehavior.AllowGet
                     };
                 }
                 else
                 {
-                    throw new Exception("Error de comunicacion. Vuelva a intentarlo o comuniquese con el administrador. ");
+                    throw new Exception("Error de comunicaci&oacute;n. Vuelva a intentarlo o comuniquese con el administrador. ");
                 }
             }
             catch (Exception ex)
@@ -160,7 +160,7 @@ namespace FleeteInvoicing.Controllers
             }
             else
             {
-                Session["MessageWarning"] = "Usted no cuenta con los permisos suficientes para realizar esta accion, Comunicate con el administrador del sistema.";
+                Session["MessageWarning"] = "Usted no cuenta con los permisos suficientes para realizar esta acci&oacute;n, Comunicate con el administrador del sistema.";
             }
             return RedirectToAction("Index");
         }

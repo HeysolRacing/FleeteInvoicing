@@ -1,16 +1,26 @@
 ﻿@{
-    ViewBag.Title = "Unauthorized";
+    ViewBag.Title = "Acceso denegado";
+    ViewBag.Description = "Usted no cuenta con los permisos para accesar a este módulo";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<address>
-    Por favor contacta al area de IT para solicitar tus accesos<br />
-    <br />
-</address>
+<div align="center">
+    <div class="jumbotron text-left">
+        <header>
+            <h1><span aria-hidden="true" class="fa fa-ban text-danger"></span> @ViewBag.Title</h1>
+        </header>
+        <p>@ViewBag.Description</p>
 
-<address>
-    <strong>IT Director:</strong>   <a href="mailto:jsol@elementcorp.com">Janet Sol</a><br />
-    <strong>Support:</strong>   <a href="mailto:hsagaon@elementcorp.com">Heysel Sagaon</a><br />
-    <strong>Support:</strong>   <a href="mailto:vcruz@elementcorp.com">Victor Cruz</a><br />
-</address>
+        <address>
+            Por favor contacta al area de IT para solicitar tus accesos<br />
+            <br />
+        </address>
+
+        <address>
+            <strong>IT Director:</strong>   <a href="mailto:jsol@elementcorp.com">Janet Sol</a><br />
+            <strong>Support:</strong>   <a href="mailto:hsagaon@elementcorp.com">Heysel Sagaon</a><br />
+            <strong>Support:</strong>   <a href="mailto:vcruz@elementcorp.com">Victor Cruz</a><br />
+        </address>
+
+    </div>
+
+</div>
